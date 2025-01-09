@@ -5,191 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dashboard</title>
+    @vite(['resources/css/app.css','resources/js/app.js'])
     <link rel="icon" href="{{ asset('assets/logo-bpsdmd.png') }}?v=2" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 </head>
-<body>
+<body class="antialiased flex flex-col min-h-screen">
 <x-header></x-header>
 <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
-        <div class="rounded-md shadow-md">
-            <h2 class="text-gray-700 font-sans font-semibold text-lg p-2">Data Sewa Ruangan</h2>
-            <div class="max-w-lg w-full bg-white p-4 md:p-6">
-                <div>
-                    <div class="grid grid-cols-2">
-                        <dl class="flex items-center">
-                            <dt class="text-gray-500 text-sm font-normal me-1">Money spent:</dt>
-                            <dd class="text-gray-900 text-sm">$3,232</dd>
-                        </dl>
-                        <dl class="flex items-center justify-end">
-                            <dt class="text-gray-500 text-sm font-normal me-1">Conversion rate:</dt>
-                            <dd class="text-gray-900 text-sm">1.2%</dd>
-                        </dl>
-                        </div>
-                </div>
-
-                <div id="column-chart"></div>
-                    <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-                    <div class="flex justify-between items-center pt-5">
-                        <!-- Button -->
-                        <button
-                        id="dropdownDefaultButton"
-                        data-dropdown-toggle="lastDaysdropdown"
-                        data-dropdown-placement="bottom"
-                        class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
-                        type="button">
-                        Last 7 days
-                        <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
-                        </button>
-                        <!-- Dropdown menu -->
-                        <div id="lastDaysdropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 7 days</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 30 days</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 90 days</a>
-                            </li>
-                            </ul>
-                        </div>
-                        <a
-                        href="#"
-                        class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-                        Leads Report
-                        <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                        </svg>
-                        </a>
-                    </div>
-                    </div>
-                </div>
+      <h1 class="font-sans text-2xl font-semibold p-4 text-center">Dashboard</h1>
+        <div class="shadow-lg">
+            <h2 class="text-gray-700 font-sans font-semibold text-lg p-2 mb-4">Data Sewa Ruangan</h2>
+            <table class="min-w-full bg-white border rounded-lg">
+              <thead class="bg-gray-700 text-white">
+                  <tr>
+                      <th class="py-2 px-4 text-left">Nama Gedung</th>
+                      <th class="py-2 px-4 text-left">Kluster</th>
+                      <th class="py-2 px-4 text-left">Jumlah Ruang</th>
+                      <th class="py-2 px-4 text-left">Jumlah Booking</th>
+                  </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-300">
+                  <!-- Contoh Data 1 -->
+                  <tr>
+                      <td class="py-2 px-4">Sindoro</td>
+                      <td class="py-2 px-4">Sindoro I</td>
+                      <td class="py-2 px-4">10</td>
+                      <td class="py-2 px-4">5</td>
+                  </tr>
+              </tbody>
+          </table>
         </div>
+
+      <div class="pt-2 mt-8 w-full h-screen">
+          <div class="bg-white shadow-lg overflow-hidden">
+              <div class="flex items-center justify-between px-4 py-3 bg-gray-700 rounded-t-lg">
+                  <button id="prevMonth" class="text-white text-md hover:text-gray-300">Prev</button>
+                  <h2 id="currentMonth" class="text-white font-medium text-md"></h2>
+                  <button id="nextMonth" class="text-white text-md hover:text-gray-300">Next</button>
+              </div>
+              <div class="grid grid-cols-7 gap-1 p-1 " id="calendar">
+                  <!-- Calendar Days Go Here -->
+              </div>
+          </div>
+      
+          <div id="myModal" class="modal hidden fixed inset-0 flex items-center justify-center z-50">
+              <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+              <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-lg shadow-lg z-50 overflow-y-auto">
+                  <div class="modal-content py-4 text-left px-6">
+                      <div class="flex justify-between pb-3">
+                          <p class="text-lg font-bold">Selected Date</p>
+                          <p class="text-md font-semibold">Booking hari ini:</p>
+                          <button id="closeModal" class="modal-close px-3 py-1 rounded-full bg-gray-200 hover:bg-gray-300">✕</button>
+                      </div>
+                      <div id="modalDate" class="text-lg font-semibold"></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
     </main>
+    <x-footer></x-footer>
 </body>
 </html>
 
 <script>
-    
-const options = {
-  colors: ["#1A56DB", "#FDBA8C"],
-  series: [
-    {
-      name: "Organic",
-      color: "#1A56DB",
-      data: [
-        { x: "Mon", y: 231 },
-        { x: "Tue", y: 122 },
-        { x: "Wed", y: 63 },
-        { x: "Thu", y: 421 },
-        { x: "Fri", y: 122 },
-        { x: "Sat", y: 323 },
-        { x: "Sun", y: 111 },
-      ],
-    },
-    {
-      name: "Social media",
-      color: "#FDBA8C",
-      data: [
-        { x: "Mon", y: 232 },
-        { x: "Tue", y: 113 },
-        { x: "Wed", y: 341 },
-        { x: "Thu", y: 224 },
-        { x: "Fri", y: 522 },
-        { x: "Sat", y: 411 },
-        { x: "Sun", y: 243 },
-      ],
-    },
-  ],
-  chart: {
-    type: "bar",
-    height: "320px",
-    fontFamily: "Inter, sans-serif",
-    toolbar: {
-      show: false,
-    },
-  },
-  plotOptions: {
-    bar: {
-      horizontal: false,
-      columnWidth: "70%",
-      borderRadiusApplication: "end",
-      borderRadius: 8,
-    },
-  },
-  tooltip: {
-    shared: true,
-    intersect: false,
-    style: {
-      fontFamily: "Inter, sans-serif",
-    },
-  },
-  states: {
-    hover: {
-      filter: {
-        type: "darken",
-        value: 1,
-      },
-    },
-  },
-  stroke: {
-    show: true,
-    width: 0,
-    colors: ["transparent"],
-  },
-  grid: {
-    show: false,
-    strokeDashArray: 4,
-    padding: {
-      left: 2,
-      right: 2,
-      top: -14
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  legend: {
-    show: false,
-  },
-  xaxis: {
-    floating: false,
-    labels: {
-      show: true,
-      style: {
-        fontFamily: "Inter, sans-serif",
-        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
-      }
-    },
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-  },
-  yaxis: {
-    show: false,
-  },
-  fill: {
-    opacity: 1,
-  },
-}
+function generateCalendar(year, month) {
+          const calendarElement = document.getElementById('calendar');
+          const currentMonthElement = document.getElementById('currentMonth');
+          
+          const firstDayOfMonth = new Date(year, month, 1);
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
+          
+          calendarElement.innerHTML = '';
+          const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+          currentMonthElement.innerText = `${monthNames[month]} ${year}`;
+          
+          const firstDayOfWeek = firstDayOfMonth.getDay();
+          const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+          daysOfWeek.forEach(day => {
+              const dayElement = document.createElement('div');
+              dayElement.className = 'text-center font-semibold';
+              dayElement.style.fontSize = '15px';
+              dayElement.innerText = day;
+              calendarElement.appendChild(dayElement);
+          });
 
-if(document.getElementById("column-chart") && typeof ApexCharts !== 'undefined') {
-  const chart = new ApexCharts(document.getElementById("column-chart"), options);
-  chart.render();
-}
+          for (let i = 0; i < firstDayOfWeek; i++) {
+              const emptyDayElement = document.createElement('div');
+              calendarElement.appendChild(emptyDayElement);
+          }
+
+          for (let day = 1; day <= daysInMonth; day++) {
+              const dayElement = document.createElement('div');
+              dayElement.className = 'text-center text-gray-700 py-2 hover:bg-gray-400 hover:text-white font-semibold cursor-pointer rounded-md';
+              dayElement.style.fontSize = '13px';
+              dayElement.innerText = day;
+
+              const currentDate = new Date();
+              if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDate()) {
+                  dayElement.classList.add('bg-yellow-400', 'text-white', 'hover:bg-yellow-300');
+              }
+
+              dayElement.addEventListener('click', () => showModal(`${monthNames[month]} ${day}, ${year}`));
+
+              calendarElement.appendChild(dayElement);
+          }
+      }
+
+      const currentDate = new Date();
+      let currentYear = currentDate.getFullYear();
+      let currentMonth = currentDate.getMonth();
+      generateCalendar(currentYear, currentMonth);
+
+      document.getElementById('prevMonth').addEventListener('click', () => {
+          currentMonth--;
+          if (currentMonth < 0) {
+              currentMonth = 11;
+              currentYear--;
+          }
+          generateCalendar(currentYear, currentMonth);
+      });
+
+      document.getElementById('nextMonth').addEventListener('click', () => {
+          currentMonth++;
+          if (currentMonth > 11) {
+              currentMonth = 0;
+              currentYear++;
+          }
+          generateCalendar(currentYear, currentMonth);
+      });
+
+      function showModal(selectedDate) {
+          const modal = document.getElementById('myModal');
+          const modalDateElement = document.getElementById('modalDate');
+          modalDateElement.innerText = selectedDate;
+          modal.classList.remove('hidden');
+      }
+
+      document.getElementById('closeModal').addEventListener('click', () => {
+          document.getElementById('myModal').classList.add('hidden');
+      });
+
+
+  if(document.getElementById("column-chart") && typeof ApexCharts !== 'undefined') {
+    const chart = new ApexCharts(document.getElementById("column-chart"), options);
+    chart.render();
+  }
 
 </script>

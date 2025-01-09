@@ -15,8 +15,12 @@ Route::post('/login', [AuthController::class, 'verify'])->name('auth.verify');
 
 Route::group(['middleware'=>'auth:admin'], function(){
     Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.dashboard.index');
+    Route::get('/admin/daftar-ruang', [AdminController::class, 'daftar_ruang'])->name('admin.daftar-ruang');
+    Route::get('/admin/tambah-ruang', [AdminController::class, 'tambah_ruang'])->name('admin.tambah-ruang');
 });
 
 Route::group(['middleware'=>'auth:sup-admin'], function(){
     Route::get('/sup-admin/home', [SuperAdminController::class, 'index'])->name('sup-admin.dashboard.index');
 });
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

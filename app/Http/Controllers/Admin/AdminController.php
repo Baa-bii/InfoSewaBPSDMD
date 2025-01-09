@@ -10,8 +10,14 @@ use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
 {
     public function index():View{
-        $user = Auth::user();
-        $admin = $user->dosen;
-        return view('admin.dashboard', compact('user'));
+        return view('admin.dashboard');
+    }
+
+    public function tambah_ruang():View{
+        return view('admin.tambah_ruang');
+    }
+
+    public function daftar_ruang():View{
+        return view('admin.daftar_ruang');
     }
 }
