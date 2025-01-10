@@ -39,12 +39,12 @@
           </table>
         </div>
 
-      <div class="pt-2 mt-8 w-full h-screen">
+        <div class="pt-2 mt-8 w-full h-screen">
           <div class="bg-white shadow-lg overflow-hidden">
               <div class="flex items-center justify-between px-4 py-3 bg-gray-700 rounded-t-lg">
-                  <button id="prevMonth" class="text-white text-md hover:text-gray-300">Prev</button>
+                  <button id="prevMonth" class="text-white text-md hover:text-blue-400">Prev</button>
                   <h2 id="currentMonth" class="text-white font-medium text-md"></h2>
-                  <button id="nextMonth" class="text-white text-md hover:text-gray-300">Next</button>
+                  <button id="nextMonth" class="text-white text-md hover:text-blue-400">Next</button>
               </div>
               <div class="grid grid-cols-7 gap-1 p-1 " id="calendar">
                   <!-- Calendar Days Go Here -->
@@ -64,8 +64,7 @@
                   </div>
               </div>
           </div>
-      </div>
-      </div>
+        </div>
     </main>
     <x-footer></x-footer>
 </body>
@@ -106,7 +105,7 @@ function generateCalendar(year, month) {
 
               const currentDate = new Date();
               if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDate()) {
-                  dayElement.classList.add('bg-yellow-400', 'text-white', 'hover:bg-yellow-300');
+                  dayElement.classList.add('bg-blue-400', 'text-white', 'hover:bg-blue-600');
               }
 
               dayElement.addEventListener('click', () => showModal(`${monthNames[month]} ${day}, ${year}`));

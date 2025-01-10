@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('jadwal_booking', function (Blueprint $table) {
             $table->id();
+            // Foreign Keys
+            $table->unsignedBigInteger('id_ruang');
+            $table->string('kluster');
+            $table->date('tanggal_start');
+            $table->date('tanggal_end');
+            // Foreign Key Constraint
+            $table->foreign('id_ruang')->references('id')->on('ruang')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -22,6 +29,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('jadwal_booking', function (Blueprint $table) {
+            $table->dropForeign(['id_ruang']);
+          
+        });
         Schema::dropIfExists('jadwal_booking');
     }
 };

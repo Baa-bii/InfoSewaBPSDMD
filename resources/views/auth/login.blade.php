@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <section class="bg-red-400 bg-center backdrop-blur-md" style="background-image: url('assets/bg.png')">
+    <section class="bg-cover bg-center backdrop-blur-md" style="background-image: url('assets/bg.jpg')">
         <div class="flex flex-row items-center justify-end mx-auto h-screen lg:py-0">
             <div class="bg-white p-6 h-screen w-2/6 flex flex-col justify-center">
                 <div class="flex justify-center items-center">

@@ -13,11 +13,7 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
-    public function tambah_ruang():View{
-        return view('admin.tambah_ruang');
-    }
-
-    public function daftar_ruang():View{
-        return view('admin.daftar_ruang');
+    public function data_ruang():View{
+        return view('admin.data_ruang');
     }
 }

@@ -14,13 +14,14 @@
     <x-header></x-header>
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
+        <div class=" p-2 mb-2 rounded-md w-fit text-white bg-blue-600 hover:bg-blue-800">Tambah Ruang</div>
         <table class="min-w-full bg-white border rounded-lg">
         <thead class="bg-gray-700 text-white">
             <tr class="border border-gray-300">
                 <th class="py-2 px-4 text-left border-r border-white">Nama Gedung</th>
                 <th class="py-2 px-4 text-left border-r border-white">Kluster</th>
                 <th class="py-2 px-4 text-left border-r border-white">Jumlah Ruang</th>
-                <th class="py-2 px-4 text-left border-r border-white">Kuota</th>
+                <th class="py-2 px-4 text-left border-r border-white">Kapasitas</th>
                 <th class="py-2 px-4 text-left">Aksi</th>
             </tr>
         </thead>

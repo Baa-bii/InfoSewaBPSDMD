@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking', function (Blueprint $table) {
+        Schema::create('waktu', function (Blueprint $table) {
             $table->id();
+            $table->time('jam_start');
+            $table->time('jam_end');
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('booking');
+        Schema::dropIfExists('waktu');
     }
 };

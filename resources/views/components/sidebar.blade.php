@@ -40,20 +40,11 @@
                                 class="flex items-center justify-between w-full text-base px-4 py-4 font-medium text-gray-700 dark:text-white hover:text-white hover:bg-gray-900 rounded-lg"
                             >
                                 <span class="flex items-center">
-                                    <svg
-                                        class="w-6 h-6 text-gray-500 dark:text-gray-400"
-                                        fill="currentColor"
-                                        viewBox="0 0 36 36"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            class="clr-i-solid clr-i-solid-path-1"
-                                            d="M33,19a1,1,0,0,1-.71-.29L18,4.41,3.71,18.71a1,1,0,0,1-1.41-1.41l15-15a1,1,0,0,1,1.41,0l15,15A1,1,0,0,1,33,19Z"
-                                        ></path>
-                                        <path
-                                            class="clr-i-solid clr-i-solid-path-2"
-                                            d="M18,7.79,6,19.83V32a2,2,0,0,0,2,2h7V24h6V34h7a2,2,0,0,0,2-2V19.76Z"
-                                        ></path>
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                    class="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-gray-300" 
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                        <path d="M5 5v14a1 1 0 0 0 1 1h3v-2H7V6h2V4H6a1 1 0 0 0-1 1zm14.242-.97-8-2A1 1 0 0 0 10 3v18a.998.998 0 0 0 1.242.97l8-2A1 1 0 0 0 20 19V5a1 1 0 0 0-.758-.97zM15 12.188a1.001 1.001 0 0 1-2 0v-.377a1 1 0 1 1 2 .001v.376z" />
                                     </svg>
                                     <span class="ml-3">Ruang</span>
                                 </span>
@@ -78,18 +69,10 @@
                             >
                                 <li>
                                     <a
-                                        href="{{ route('admin.tambah-ruang') }}"
+                                        href="{{ route('admin.data-ruang') }}"
                                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
                                     >
-                                        Tambah Ruang
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="{{ route('admin.daftar-ruang') }}"
-                                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
-                                    >
-                                        Daftar Ruang
+                                        Data Ruangan
                                     </a>
                                 </li>
                             </ul>
@@ -101,21 +84,12 @@
                                 class="flex items-center justify-between w-full text-base px-4 py-4 font-medium text-gray-700 dark:text-white hover:text-white hover:bg-gray-900 rounded-lg"
                             >
                                 <span class="flex items-center">
-                                    <svg
-                                        class="w-6 h-6 text-gray-500 dark:text-gray-400"
-                                        fill="currentColor"
-                                        viewBox="0 0 36 36"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            class="clr-i-solid clr-i-solid-path-1"
-                                            d="M33,19a1,1,0,0,1-.71-.29L18,4.41,3.71,18.71a1,1,0,0,1-1.41-1.41l15-15a1,1,0,0,1,1.41,0l15,15A1,1,0,0,1,33,19Z"
-                                        ></path>
-                                        <path
-                                            class="clr-i-solid clr-i-solid-path-2"
-                                            d="M18,7.79,6,19.83V32a2,2,0,0,0,2,2h7V24h6V34h7a2,2,0,0,0,2-2V19.76Z"
-                                        ></path>
-                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                    class="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-gray-300" 
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                        <path d="M6.012 18H21V4c0-1.103-.897-2-2-2H6c-1.206 0-3 .799-3 3v14c0 2.201 1.794 3 3 3h15v-2H6.012C5.55 19.988 5 19.806 5 19s.55-.988 1.012-1zM8 9h3V6h2v3h3v2h-3v3h-2v-3H8V9z">
+                                            </path></svg>
                                     <span class="ml-3">Booking</span>
                                 </span>
                                 <svg
@@ -142,7 +116,7 @@
                                         href="#"
                                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
                                     >
-                                        Tambah Booking
+                                        Booking Ruang
                                     </a>
                                 </li>
                                 <li>
@@ -150,15 +124,7 @@
                                         href="#"
                                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
                                     >
-                                        Daftar Booking
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
-                                    >
-                                        Riwayat Booking
+                                        Data Booking
                                     </a>
                                 </li>
                             </ul>
@@ -171,7 +137,27 @@
 <script>
     function toggleDropdown(id) {
     const dropdown = document.getElementById(id);
-    dropdown.classList.toggle('hidden');
+    const isHidden = dropdown.classList.toggle('hidden');
+
+    // Save the state in localStorage
+    localStorage.setItem(id, isHidden ? 'hidden' : 'visible');
 }
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdownIds = ['dropdown-ruang', 'dropdown-booking']; // Add all dropdown IDs here
+
+    dropdownIds.forEach(id => {
+        const state = localStorage.getItem(id);
+        const dropdown = document.getElementById(id);
+
+        if (dropdown) {
+            if (state === 'visible') {
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+    });
+});
+
 
 </script>
