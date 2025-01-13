@@ -9,6 +9,26 @@ use Illuminate\View\View;
 class SuperAdminController extends Controller
 {
     public function index():View{
-        return view('SuperAdmin.dashboard');
+        return view('superAdmin.dashboard');
+    }
+
+    public function data_ruang():View{
+        return view('superAdmin.data_ruang');
+    }
+
+    public function data_user():View{
+        return view('superAdmin.data_user');
+    }
+
+    public function booking_ruang():View{
+        return view('superAdmin.booking.booking_ruang');
+    }
+
+    public function booking_data():View{
+        return view('superAdmin.booking.data_booking');
+    }
+
+    public function booking_riwayat():View{
+        return view('superAdmin.booking.riwayat_booking');
     }
 }

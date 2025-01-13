@@ -22,6 +22,11 @@ Route::group(['middleware'=>'auth:admin'], function(){
 
 Route::group(['middleware'=>'auth:sup-admin'], function(){
     Route::get('/sup-admin/home', [SuperAdminController::class, 'index'])->name('sup-admin.dashboard.index');
+    Route::get('/sup-admin/data-ruang', [SuperAdminController::class, 'data_ruang'])->name('sup-admin.data-ruang');
+    Route::get('/sup-admin/data-user', [SuperAdminController::class, 'data_user'])->name('sup-admin.data-user');
+    Route::get('/sup-admin/booking_ruang', [SuperAdminController::class, 'booking_ruang'])->name('sup-admin.booking-ruang');
+    Route::get('/sup-admin/booking_data', [SuperAdminController::class, 'booking_data'])->name('sup-admin.booking-data');
+    Route::get('/sup-admin/booking_riwayat', [SuperAdminController::class, 'booking_riwayat'])->name('sup-admin.booking-riwayat');
 });
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

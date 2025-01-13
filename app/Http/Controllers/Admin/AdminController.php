@@ -20,7 +20,7 @@ class AdminController extends Controller
     public function booking_ruang():View{
         return view('admin.booking.booking_ruang');
     }
-    public function booking():View{
+    public function booking_data():View{
         return view('admin.booking.data_booking');
     }
 }
