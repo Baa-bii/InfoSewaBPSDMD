@@ -16,6 +16,8 @@ Route::post('/login', [AuthController::class, 'verify'])->name('auth.verify');
 Route::group(['middleware'=>'auth:admin'], function(){
     Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.dashboard.index');
     Route::get('/admin/data-ruang', [AdminController::class, 'data_ruang'])->name('admin.data-ruang');
+    Route::get('/admin/booking-ruang', [AdminController::class, 'booking_ruang'])->name('admin.booking-ruang');
+    Route::get('/admin/booking-data', [AdminController::class, 'booking_data'])->name('admin.booking-data');
 });
 
 Route::group(['middleware'=>'auth:sup-admin'], function(){

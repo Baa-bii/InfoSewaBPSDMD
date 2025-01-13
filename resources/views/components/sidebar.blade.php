@@ -113,7 +113,7 @@
                             >
                                 <li>
                                     <a
-                                        href="#"
+                                        href="{{ route('admin.booking-ruang') }}"
                                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
                                     >
                                         Booking Ruang
@@ -121,7 +121,7 @@
                                 </li>
                                 <li>
                                     <a
-                                        href="#"
+                                        href="{{ route('admin.booking-data') }}"
                                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
                                     >
                                         Data Booking

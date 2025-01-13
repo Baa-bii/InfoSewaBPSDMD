@@ -14,41 +14,27 @@
     <x-header></x-header>
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
-        <div class=" p-2 mb-2 rounded-md w-fit text-white bg-blue-600 hover:bg-blue-800">Tambah Ruang</div>
-        <table class="min-w-full bg-white border rounded-lg">
+        <table class="w-full min-w-max table-auto bg-white border rounded-lg">
         <thead class="bg-gray-700 text-white">
             <tr class="border border-gray-300">
-                <th class="py-2 px-4 text-left border-r border-white">Nama Gedung</th>
-                <th class="py-2 px-4 text-left border-r border-white">Kluster</th>
-                <th class="py-2 px-4 text-left border-r border-white">Jumlah Ruang</th>
-                <th class="py-2 px-4 text-left border-r border-white">Kapasitas</th>
-                <th class="py-2 px-4 text-left">Aksi</th>
+                <th class="p-2 text-left border-r border-white">Nama Gedung</th>
+                <th class="p-2 text-left border-r border-white">Kluster</th>
+                <th class="p-2 text-left border-r border-white">Jumlah Ruang</th>
+                <th class="p-2 text-left border-r border-white">Kapasitas</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-300">
             <!-- Contoh Data 1 -->
             <tr>
-                <td class="py-2 px-4 border-r border-gray-500">Sindoro</td>
-                <td class="py-2 px-4 border-r border-gray-500">Sindoro I</td>
-                <td class="py-2 px-4 border-r border-gray-500">10</td>
-                <td class="py-2 px-4 border-r border-gray-500">5</td>
-                <td class="p-4 border-b">
-                    <a href="#">
-                    <button class="bg-green-400 w-auto p-1 rounded text-white hover:bg-green-500 shadow-md">
-                        Edit
-                    </button>
-                    <form action="#" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="bg-red-500 w-auto p-1 rounded text-white hover:bg-red-600 shadow-md">
-                            Delete
-                        </button>
-                    </form>
-                </td>
+                <td class="py-1 px-2 border-r border-gray-500">Sindoro</td>
+                <td class="py-1 px-2 border-r border-gray-500">Sindoro I</td>
+                <td class="py-1 px-2 border-r border-gray-500">10</td>
+                <td class="py-1 px-2 ">5</td>
             </tr>
         </tbody>
     </table>
 </main>
+<x-footer></x-footer>
     
 </body>
 </html>

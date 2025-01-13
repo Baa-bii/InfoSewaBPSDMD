@@ -39,7 +39,7 @@
           </table>
         </div>
 
-        <div class="pt-2 mt-8 w-full h-screen">
+        <div class="pt-2 mt-8 w-full">
           <div class="bg-white shadow-lg overflow-hidden">
               <div class="flex items-center justify-between px-4 py-3 bg-gray-700 rounded-t-lg">
                   <button id="prevMonth" class="text-white text-md hover:text-blue-400">Prev</button>
