@@ -15,28 +15,6 @@
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
         <h1 class="font-sans text-2xl font-semibold p-4 text-center">Dashboard</h1>
-          <div class="shadow-lg">
-              <h2 class="text-gray-700 font-sans font-semibold text-lg p-2 mb-4">Data Sewa Ruangan</h2>
-              <table class="min-w-full bg-white border rounded-lg">
-                <thead class="bg-gray-700 text-white">
-                    <tr>
-                        <th class="py-2 px-4 text-left">Nama Gedung</th>
-                        <th class="py-2 px-4 text-left">Kluster</th>
-                        <th class="py-2 px-4 text-left">Jumlah Ruang</th>
-                        <th class="py-2 px-4 text-left">Jumlah Booking</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-300">
-                    <!-- Contoh Data 1 -->
-                    <tr>
-                        <td class="py-2 px-4">Sindoro</td>
-                        <td class="py-2 px-4">Sindoro I</td>
-                        <td class="py-2 px-4">10</td>
-                        <td class="py-2 px-4">5</td>
-                    </tr>
-                </tbody>
-            </table>
-          </div>
   
           <div class="pt-2 mt-8 w-full">
             <div class="bg-white shadow-lg overflow-hidden">
