@@ -262,7 +262,7 @@
                     </li>
                     <!-- Data User -->
                     <li class="hover:bg-gray-900 rounded-lg">
-                        <a href="{{ route('sup-admin.data-user') }}"
+                        <a href="{{ route('sup-admin.user.index') }}"
                             class="flex items-center w-full text-base mt-4 px-4 py-4 font-medium rounded-lg text-gray-700 dark:text-white hover:text-white hover:bg-gray-900"
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" 

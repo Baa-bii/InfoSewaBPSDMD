@@ -24,7 +24,6 @@ Route::group(['middleware'=>'auth:admin'], function(){
 
 Route::group(['middleware'=>'auth:sup-admin'], function(){
     Route::get('/sup-admin/home', [SuperAdminController::class, 'index'])->name('sup-admin.dashboard.index');
-    Route::get('/sup-admin/data-user', [UserController::class, 'index'])->name('sup-admin.data-user');
     Route::get('/sup-admin/booking_ruang', [SuperAdminController::class, 'booking_ruang'])->name('sup-admin.booking-ruang');
     Route::get('/sup-admin/booking_data', [SuperAdminController::class, 'booking_data'])->name('sup-admin.booking-data');
     Route::get('/sup-admin/booking_riwayat', [SuperAdminController::class, 'booking_riwayat'])->name('sup-admin.booking-riwayat');
@@ -36,6 +35,14 @@ Route::group(['middleware'=>'auth:sup-admin'], function(){
             'edit' => 'sup-admin.ruang.edit',
             'update' => 'sup-admin.ruang.update',
             'destroy' => 'sup-admin.ruang.destroy',
+        ],
+    ])->except(['show']);
+    Route::resource('/sup-admin/data-user', UserController::class, [
+        'names' => [
+            'index' => 'sup-admin.user.index',
+            'create' => 'sup-admin.user.create',
+            'store' => 'sup-admin.user.store',
+            'destroy' => 'sup-admin.user.destroy',
         ],
     ])->except(['show']);
 });

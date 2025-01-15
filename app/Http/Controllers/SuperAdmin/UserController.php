@@ -14,4 +14,34 @@ class UserController extends Controller
         return view('superAdmin.data_user', compact('users'));
     }
     
+    public function create(){
+        return view('superAdmin.create_user');
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'role' => 'required|string|max:255',
+            'password' => 'required|string|min:6|max:255',
+        ]);
+
+        // Enkripsi password sebelum menyimpan
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
+        // Simpan data ke database
+        User::create($validatedData);
+
+        return redirect()->route('sup-admin.user.index')->with('success', 'User berhasil ditambahkan.');
+    }
+
+    public function destroy($id)
+    {
+        $users = User::findOrFail($id);
+        $users->delete();
+
+        return redirect()->route('sup-admin.user.index')->with('success', 'User berhasil dihapus.');
+    }
+
 }

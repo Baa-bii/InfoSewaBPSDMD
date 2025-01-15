@@ -15,6 +15,11 @@
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
         <h2 class="font-sans text-gray-700 m-2 font-medium">Data User</h2>
+        <a href="{{ route('sup-admin.user.create') }}">
+            <div class="bg-blue-500 p-2 mb-4 font-sans text-white font-medium cursor-pointer text-md w-fit rounded-md shadow-md hover:bg-blue-700" id="openModal">
+                + Tambahkan User
+            </div>
+        </a>
         <table class="w-full min-w-max table-auto bg-white border rounded-lg shadow-md">
             <thead class="bg-gray-700 text-white">
                 <tr class="border border-gray-300">
@@ -37,7 +42,7 @@
                                 Edit
                             </button>
                         </a>
-                        <form action="#" method="POST" style="display:inline;">
+                        <form action="{{ route('sup-admin.user.destroy', $item->id)}}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="bg-red-500 w-auto p-1 rounded text-white hover:bg-red-600 shadow-md">

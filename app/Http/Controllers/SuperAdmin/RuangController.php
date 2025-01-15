@@ -32,29 +32,20 @@ class RuangController extends Controller
     //Simpan Ruang yang ditambahkan
     public function store(Request $request)
     {
+        // Validasi data
         $validatedData = $request->validate([
-            'nama_ruang' => 'required|string|max:255',
             'kluster' => 'required|string|max:255',
+            'nama_ruang' => 'required|string|max:255',
             'kapasitas' => 'required|integer|min:1',
         ]);
-        
-        Ruang::create([
-            'kluster' => $validatedData['kluster'],
-            'nama_ruang' => $validatedData['nama_ruang'],
-            'kapasitas' => $validatedData['kapasitas'],
-        ]);
 
-        $exists = Ruang::where('nama_ruang', $validatedData['nama_ruang'])
-                ->where('kluster', $validatedData['kluster'])
-                ->exists();
-
-        if ($exists) {
-            return redirect()->back()->withErrors(['nama_ruang' => 'Ruangan ini sudah ada.']);
-        }
+        // Simpan data ke database
         Ruang::create($validatedData);
 
+        // Redirect dengan pesan sukses
         return redirect()->route('sup-admin.ruang.index')->with('success', 'Ruang berhasil ditambahkan.');
     }
+
 
     //Edit Ruang
     public function edit($id)

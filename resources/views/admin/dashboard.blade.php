@@ -101,7 +101,7 @@ function generateCalendar(year, month) {
               const dayElement = document.createElement('div');
               dayElement.className = 'text-center text-gray-700 py-2 hover:bg-gray-400 hover:text-white font-semibold cursor-pointer rounded-md';
               dayElement.style.fontSize = '13px';
-              dayElement.innerText = day;
+              dayElement.innerText = day;   
 
               const currentDate = new Date();
               if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDate()) {
