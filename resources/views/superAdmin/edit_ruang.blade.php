@@ -19,17 +19,17 @@
             @method('PUT')
             <div class="m-6">
                 <label for="nama_ruang" class="form-label font-sans font-medium">Nama Ruang: </label>
-                <input type="text" name="nama_ruang" class="rounded-lg w-full" value="{{ old('nama_ruang', $ruang->nama_ruang ?? '') }}" required>
+                <input type="text" name="nama_ruang" class="rounded-lg w-full border-gray-200 border-2 p-2" value="{{ old('nama_ruang', $ruang->nama_ruang ?? '') }}" required>
             </div>
             <div class="m-6">
                 <label for="kluster" class="form-label font-sans font-medium">Kluster: </label>
-                <select name="kluster" id="kluster" class="rounded-lg w-full" required>
+                <select name="kluster" id="kluster" class="rounded-lg w-full border-gray-200 border-2 p-2" required>
                     <option value="">Select Kluster</option>
-                    {{-- @foreach ($klusters as $kluster)
-                        <option value="{{ $kluster }}" {{ (old('kluster', $ruang->kluster ?? '') == $kluster) ? 'selected' : '' }}>
-                            {{ $kluster }}
+                    @foreach ($klusters as $kluster)
+                        <option value="{{ $kluster->kluster }}" {{ (old('kluster', $ruang->kluster ?? '') == $kluster->kluster) ? 'selected' : '' }}>
+                            {{ $kluster->kluster }}
                         </option>
-                    @endforeach --}}
+                    @endforeach
                 </select>
             </div>
             <div class="m-6">
@@ -37,11 +37,19 @@
                 <input type="number" name="kapasitas" id="kapasitas" class="rounded-lg w-full" min="1" value="{{ old('kapasitas', $ruang->kapasitas ?? '') }}" required>
             </div>
             <div>
+                <button class="bg-gray-500 p-2 text-white rounded hover:bg-gray-600" type="button" id="closeModal">
+                    Batal
+                </button>
                 <button class="bg-blue-500 p-2 text-white rounded hover:bg-blue-600" type="submit">
                     Simpan
                 </button>
             </div>
         </form>
+        <script>
+            document.getElementById('closeModal').addEventListener('click', () => {
+                window.location.href="{{ route('sup-admin.ruang.index') }}";
+            });
+        </script>
     </main>
     <x-footer></x-footer>
 </body>

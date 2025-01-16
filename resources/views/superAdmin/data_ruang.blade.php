@@ -15,38 +15,14 @@
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
         <div>
-            <div class="bg-blue-500 p-2 mb-4 font-sans text-white font-medium cursor-pointer text-md w-fit rounded-md shadow-md hover:bg-blue-700" id="openModal">
-                + Tambahkan Ruang
-            </div>
-            <div id="ruangModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-                <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-                    <form action="{{ route('sup-admin.ruang.store') }}" method="POST" id="form-ruang" onsubmit="console.log('Form submitted');">
-                        @csrf
-                        <h2 class="text-xl font-bold mb-4">Tambahkan Ruang</h2>
-                    
-                        <!-- Kluster Input -->
-                        <label for="cluster" class="block text-sm font-medium mb-2">Kluster</label>
-                        <input id="cluster" name="kluster" type="text" class="w-full p-2 border rounded-md mb-4" placeholder="Nama Kluster" required>
-                        
-                        <!-- Nama Ruang Input -->
-                        <label for="room" class="block text-sm font-medium mb-2">Nama Ruang</label>
-                        <input id="room" name="nama" type="text" class="w-full p-2 border rounded-md mb-4" placeholder="Nama Ruang baru" required>
-                        
-                        <!-- Kapasitas -->
-                        <label for="kapasitas" class="block text-sm font-medium mb-2">Kapasitas</label>
-                        <input id="kapasitas" name="kapasitas" type="number" class="w-full p-2 border rounded-md mb-4" placeholder="Kapasitas Ruang Baru" min="1" required>
-                        
-                        <!-- Action Buttons -->
-                        <div class="flex justify-end gap-2">
-                            <button type="button" id="closeModal" class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400">Batal</button>
-                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Simpan</button>
-                        </div>
-                    </form>        
+            <a href="{{ route('sup-admin.ruang.create') }}">
+                <div class="bg-blue-500 p-2 mb-4 font-sans text-white font-medium cursor-pointer text-md w-fit rounded-md shadow-md hover:bg-blue-700" id="openModal">
+                    + Tambahkan Ruang
                 </div>
-            </div>
+            </a>
             <div>
                 <form method="GET" action="{{ route('sup-admin.ruang.index') }}" class="flex flex-row m-2">
-                
+                @csrf
                 <div class="border-2 border-gray-400 w-fit rounded-md ml-3">
                     <label for="filter_kluster" class="form-label font-sans font-medium ml-1">Filter by Kluster</label>
                     <select name="filter_kluster" id="filter_prodi" class=" text-sm mr-1" onchange="this.form.submit()">
@@ -110,7 +86,7 @@
     document.getElementById('form-ruang').addEventListener('submit', function (e) {
     console.log('Form submitted');
     });
-    
+
     // Close modal
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('hidden');

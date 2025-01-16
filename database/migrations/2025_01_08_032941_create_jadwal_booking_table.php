@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('tanggal_end');
             // Foreign Key Constraint
             $table->foreign('id_ruang')->references('id')->on('ruang')->onDelete('cascade');
-            $table->string('status');
+            $table->enum('status',['belum', 'sudah'])->default('belum');
             $table->timestamps();
         });
     }

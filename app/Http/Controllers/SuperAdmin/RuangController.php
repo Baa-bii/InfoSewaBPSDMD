@@ -26,7 +26,7 @@ class RuangController extends Controller
     public function create()
     {
         $ruang = Ruang::all();
-        return view('superAdmin.data_ruang',compact('ruang'));
+        return view('superAdmin.create_ruang',compact('ruang'));
     }
 
     //Simpan Ruang yang ditambahkan
@@ -34,11 +34,20 @@ class RuangController extends Controller
     {
         // Validasi data
         $validatedData = $request->validate([
-            'kluster' => 'required|string|max:255',
             'nama_ruang' => 'required|string|max:255',
+            'kluster' => 'required|string|max:255',
             'kapasitas' => 'required|integer|min:1',
         ]);
 
+
+        $exists = Ruang::where('nama_ruang', $validatedData['nama_ruang'])
+                ->where('kluster', $validatedData['kluster'])
+                ->exists();
+
+        if ($exists) {
+            return redirect()->back()->withErrors(['nama' => 'Ruangan ini sudah ada.']);
+        }
+        $ruang = Ruang::all();
         // Simpan data ke database
         Ruang::create($validatedData);
 
@@ -51,22 +60,36 @@ class RuangController extends Controller
     public function edit($id)
     {
         $ruang = Ruang::findOrFail($id);
-        return view('superAdmin.edit_ruang', compact('ruang'));
+        $klusters = Ruang::select('kluster')->distinct()->get();
+        return view('superAdmin.edit_ruang', compact('ruang', 'klusters'));
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'nama_ruang' => 'required|string|max:255',
             'kluster' => 'required|string|max:255',
             'kapasitas' => 'required|integer|min:1',
         ]);
 
-        $ruang = Ruang::findOrFail($id);
-        $ruang->update($request->all());
+        // Check for uniqueness
+        $exists = Ruang::where([
+            ['nama_ruang', $validatedData['nama_ruang']],
+            ['kluster', $validatedData['kluster']],
+        ])->where('id', '!=', $id)->exists();
 
-        return redirect()->route('sup-admin.ruang.edit')->with('success', 'Ruang berhasil diperbarui.');
+        if ($exists) {
+            return redirect()->back()->withErrors(['nama_ruang' => 'Ruangan ini sudah dialokasikan dengan prodi lain.']);
+        }
+
+        // Find the Ruang by ID and update
+        $ruangs = Ruang::findOrFail($id);
+        $ruangs->update($validatedData);
+
+        // Redirect back to the edit route
+        return redirect()->route('sup-admin.ruang.index', $id)->with('success', 'Ruang berhasil diperbarui.');
     }
+
 
 
     public function destroy($id)

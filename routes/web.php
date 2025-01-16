@@ -42,6 +42,8 @@ Route::group(['middleware'=>'auth:sup-admin'], function(){
             'index' => 'sup-admin.user.index',
             'create' => 'sup-admin.user.create',
             'store' => 'sup-admin.user.store',
+            'edit' => 'sup-admin.user.edit',
+            'update' => 'sup-admin.user.update',
             'destroy' => 'sup-admin.user.destroy',
         ],
     ])->except(['show']);
