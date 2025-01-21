@@ -13,28 +13,12 @@ class RuangSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table ('ruang')->insert([
-            [
-                'nama_ruang' => '101',
-                'kluster' => 'Sindoro I',
-                'kapasitas' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nama_ruang' => '102',
-                'kluster' => 'Sindoro I',
-                'kapasitas' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nama_ruang' => '103',
-                'kluster' => 'Sindoro I',
-                'kapasitas' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        // Path ke file SQL
+        $path = database_path('sql/ruang_asrama_bpsdmd.sql');
+
+        // Eksekusi file SQL
+        DB::unprepared(file_get_contents($path));
+
+        $this->command->info('Data ruang berhasil diimpor dari file SQL.');
     }
 }

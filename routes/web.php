@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use App\Http\Controllers\SuperAdmin\RuangController;
 use App\Http\Controllers\SuperAdmin\UserController;
@@ -18,13 +19,17 @@ Route::post('/login', [AuthController::class, 'verify'])->name('auth.verify');
 Route::group(['middleware'=>'auth:admin'], function(){
     Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.dashboard.index');
     Route::get('/admin/data-ruang', [AdminController::class, 'data_ruang'])->name('admin.data-ruang');
-    Route::get('/admin/booking-ruang', [AdminController::class, 'booking_ruang'])->name('admin.booking-ruang');
+    Route::get('/admin/booking-ruang', [BookingController::class, 'index'])->name('admin.booking-ruang');
+    Route::get('/admin/booking/create', [BookingController::class, 'create'])->name('admin.booking.create');
+    Route::post('/admin/booking', [BookingController::class, 'store'])->name('admin.booking.store');
     Route::get('/admin/booking-data', [AdminController::class, 'booking_data'])->name('admin.booking-data');
 });
 
 Route::group(['middleware'=>'auth:sup-admin'], function(){
     Route::get('/sup-admin/home', [SuperAdminController::class, 'index'])->name('sup-admin.dashboard.index');
-    Route::get('/sup-admin/booking_ruang', [SuperAdminController::class, 'booking_ruang'])->name('sup-admin.booking-ruang');
+    Route::get('/sup-admin/booking_ruang', [BookingController::class, 'index'])->name('sup-admin.booking-ruang');
+    Route::get('/sup-admin/booking/create', [BookingController::class, 'create'])->name('sup-admin.booking.create');
+    Route::post('/sup-admin/booking', [BookingController::class, 'store'])->name('sup-admin.booking.store');
     Route::get('/sup-admin/booking_data', [SuperAdminController::class, 'booking_data'])->name('sup-admin.booking-data');
     Route::get('/sup-admin/booking_riwayat', [SuperAdminController::class, 'booking_riwayat'])->name('sup-admin.booking-riwayat');
     Route::resource('/sup-admin/data-ruang', RuangController::class, [
@@ -37,6 +42,7 @@ Route::group(['middleware'=>'auth:sup-admin'], function(){
             'destroy' => 'sup-admin.ruang.destroy',
         ],
     ])->except(['show']);
+    Route::get('/sup-admin/get-gedung/{kluster}', [RuangController::class, 'getGedung'])->name('sup-admin.ruang.getGedung');
     Route::resource('/sup-admin/data-user', UserController::class, [
         'names' => [
             'index' => 'sup-admin.user.index',

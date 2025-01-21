@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama_ruang');
             $table->string('kluster');
+            $table->string('gedung')->nullable();
+            $table->string('harga');
             $table->integer('kapasitas');
             $table->timestamps();
         });

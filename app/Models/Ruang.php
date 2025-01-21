@@ -10,5 +10,5 @@ class Ruang extends Model
     use HasFactory;
 
     protected $table = 'ruang'; // Nama tabel
-    protected $fillable = ['nama_ruang', 'kluster', 'kapasitas']; // Kolom yang bisa diisi massal
+    protected $fillable = ['nama_ruang', 'kluster','harga', 'gedung', 'kapasitas']; // Kolom yang bisa diisi massal
 }

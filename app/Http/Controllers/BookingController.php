@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Ruang;
+use App\Models\Booking;
+
+class BookingController extends Controller
+{
+    public function index(Request $request){
+        
+        $bookings = Booking::with('ruang')->get();
+        
+        if(Auth::guard('sup-admin')){
+            return view('superAdmin.booking.booking_ruang');
+        }
+        elseif(Auth::guard('admin')){
+            return view('admin.booking.booking_ruang');
+        }
+    }
+    public function create()
+    {
+        // Ambil data kluster, gedung, dan ruang
+        $klusters = Ruang::select('kluster')->distinct()->get();
+        $gedungs = Ruang::select('gedung')->distinct()->get();
+        $rooms = Ruang::all();
+
+        // Periksa role pengguna yang sedang login
+        if (Auth::guard('admin')) {
+            return view('admin.booking.booking_ruang', compact('klusters', 'gedungs', 'rooms'));
+        } elseif (Auth::guard('sup-admin')) {
+            return view('superAdmin.booking.booking_ruang', compact('klusters', 'gedungs', 'rooms'));
+        }
+
+        abort(403, 'Akses ditolak.');
+    }
+
+
+    /**
+     * Menyimpan booking baru.
+     */
+    public function store(Request $request)
+    {
+        // Validasi data
+        $validated = $request->validate([
+            'nama_pemesan' => 'required|string|max:255',
+            'id_ruang' => 'required|exists:ruang,id',
+            'tanggal_start' => 'required|date|after_or_equal:today',
+            'tanggal_end' => 'required|date|after:tanggal_start',
+        ]);
+
+        // Validasi waktu tidak tumpang tindih
+        $isOverlap = Booking::where('id_ruang', $validated['id_ruang'])
+            ->where(function ($query) use ($validated) {
+                $query->whereBetween('tanggal_start', [$validated['tanggal_start'], $validated['tanggal_end']])
+                    ->orWhereBetween('tanggal_end', [$validated['tanggal_start'], $validated['tanggal_end']])
+                    ->orWhere(function ($query) use ($validated) {
+                        $query->where('tanggal_start', '<=', $validated['tanggal_start'])
+                                ->where('tanggal_end', '>=', $validated['tanggal_end']);
+                    });
+            })->exists();
+
+        if ($isOverlap) {
+            return back()->withErrors(['tanggal_start' => 'Ruangan sudah dibooking pada waktu tersebut.'])->withInput();
+        }
+
+        // Simpan booking baru
+        $ruang = Ruang::findOrFail($validated['id_ruang']);
+
+        Booking::create([
+            'nama_pemesan' => $validated['nama_pemesan'],
+            'id_ruang' => $ruang->id,
+            'nama_ruang' => $ruang->nama_ruang,
+            'kluster' => $ruang->kluster,
+            'gedung' => $ruang->gedung,
+            'tanggal_start' => $validated['tanggal_start'],
+            'tanggal_end' => $validated['tanggal_end'],
+        ]);
+
+        return redirect()->route(auth()->guard('admin')->check() ? 'admin.booking-ruang' : 'sup-admin.booking-ruang')
+                     ->with('success', 'Booking berhasil dibuat!');
+    }
+
+}

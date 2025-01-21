@@ -17,6 +17,7 @@ return new class extends Migration
             // Foreign Keys
             $table->unsignedBigInteger('id_ruang');
             $table->string('kluster');
+            $table->string('nama_ruang');
             $table->date('tanggal_start');
             $table->date('tanggal_end');
             // Foreign Key Constraint

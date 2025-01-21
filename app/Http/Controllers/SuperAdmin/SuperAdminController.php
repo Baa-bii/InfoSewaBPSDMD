@@ -12,10 +12,6 @@ class SuperAdminController extends Controller
         return view('superAdmin.dashboard');
     }
 
-    public function booking_ruang():View{
-        return view('superAdmin.booking.booking_ruang');
-    }
-
     public function booking_data():View{
         return view('superAdmin.booking.data_booking');
     }
