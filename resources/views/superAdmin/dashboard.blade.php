@@ -58,11 +58,17 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-300">
+                                        @forelse ($bookings as $item)
                                         <tr>
-                                            <td class="py-1 px-2 border-r border-gray-300">101</td>
-                                            <td class="py-1 px-2 border-r border-gray-300">Sindoro</td>
-                                            <td class="py-1 px-2 ">I</td>
+                                            <td class="py-1 px-2 border-r border-gray-300">{{ $item->nama_ruang }}</td>
+                                            <td class="py-1 px-2 border-r border-gray-300">{{ $item->kluster }}</td>
+                                            <td class="py-1 px-2 ">{{ $item->kluster }} {{ $item->gedung }}</td>
                                         </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="3" class="py-2 text-center">Tidak ada booking untuk tanggal ini.</td>
+                                        </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -77,7 +83,20 @@
 </html>
 
 <script>
-    function generateCalendar(year, month) {
+    function fetchBookingDates(year, month) {
+        fetch(`/api/bookings/${year}/${month}`)
+            .then(response => response.json())
+            .then(bookings => {
+                const bookedDates = bookings.map(booking => {
+                    return {
+                        start: new Date(booking.tanggal_start).getDate(),
+                        end: new Date(booking.tanggal_end).getDate()
+                    };
+                });
+                generateCalendar(year, month, bookedDates);
+            });
+    }
+    function generateCalendar(year, month, bookedDates) {
               const calendarElement = document.getElementById('calendar');
               const currentMonthElement = document.getElementById('currentMonth');
               
@@ -113,7 +132,14 @@
                   if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDate()) {
                       dayElement.classList.add('bg-blue-400', 'text-white', 'hover:bg-blue-600');
                   }
-    
+
+                  // Cek jika tanggal tersebut ada di dalam daftar bookedDates
+                    bookedDates.forEach(bookedDate => {
+                        if (day >= bookedDate.start && day <= bookedDate.end) {
+                            dayElement.classList.add('bg-red-500', 'text-white'); // Tandai tanggal yang sudah dibooking
+                        }
+                    });
+
                   dayElement.addEventListener('click', () => showModal(`${day} ${monthNames[month]}, ${year}`));
     
                   calendarElement.appendChild(dayElement);
@@ -123,7 +149,7 @@
           const currentDate = new Date();
           let currentYear = currentDate.getFullYear();
           let currentMonth = currentDate.getMonth();
-          generateCalendar(currentYear, currentMonth);
+          fetchBookingDates(currentYear, currentMonth); // Mengambil data booking dan menampilkan kalender
     
           document.getElementById('prevMonth').addEventListener('click', () => {
               currentMonth--;

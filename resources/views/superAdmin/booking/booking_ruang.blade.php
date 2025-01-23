@@ -23,21 +23,21 @@
         <div id="bookingModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
             <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full h-fit">
                 <h2 class="text-xl font-bold mb-4">Booking Ruang</h2>
-                <form action="{{ route('sup-admin.booking.create') }}" method="POST">
+                <form action="{{ route('sup-admin.booking.store') }}" method="POST">
                     @csrf
                     <!-- Nama Pemesan -->
                     <label for="nama_pemesan" class="block text-sm font-medium">Nama Pemesan</label>
-                    <input id="nama_pemesan" type="text" class="w-fit p-1 border rounded-md mb-2">
+                    <input id="nama_pemesan" name="nama_pemesan" type="text" class="w-fit p-1 border rounded-md mb-2">
 
                     <!-- Tanggal Mulai dan Tanggal Akhir -->
                     <div class="flex space-x-4 mb-2">
                         <div class="w-full">
-                            <label for="start_date" class="block text-sm font-medium">Tanggal Mulai</label>
-                            <input id="start_date" type="date" class="w-full p-1 border rounded-md">
+                            <label for="tanggal_start" class="block text-sm font-medium">Tanggal Mulai</label>
+                            <input id="tanggal_start" name="tanggal_start" type="date" class="w-full p-1 border rounded-md">
                         </div>
                         <div class="w-full">
-                            <label for="end_date" class="block text-sm font-medium">Tanggal Akhir</label>
-                            <input id="end_date" type="date" class="w-full p-1 border rounded-md">
+                            <label for="tanggal_end" class="block text-sm font-medium">Tanggal Akhir</label>
+                            <input id="tanggal_end" name="tanggal_end" type="date" class="w-full p-1 border rounded-md">
                         </div>
                     </div>
                     
@@ -45,36 +45,139 @@
                         <!-- Kluster Dropdown -->
                         <div class="w-full">
                             <label for="cluster" class="block text-sm font-medium">Kluster</label>
-                            <select id="cluster" name="kluster" class="w-full p-1 border rounded-md mb-2" required>
+                            <select id="cluster" name="kluster" class="w-full p-1 border rounded-md" required disabled>
                                 <option value="" disabled selected>Pilih Kluster</option>
-                                @foreach ($klusters as $kluster)
-                                    <option value="{{ $kluster->kluster }}">{{ $kluster->kluster }}</option>
-                                @endforeach
+                                <option value="Sumbing">Sumbing</option>
+                                <option value="Muria">Muria</option>
+                                <option value="Sindoro">Sindoro</option>
+                                <option value="Merbabu">Merbabu</option>
+                                <option value="Merapi">Merapi</option>
                             </select>
                         </div>
-                    
+
                         <!-- Gedung Dropdown -->
                         <div class="w-full">
                             <label for="gedung" class="block text-sm font-medium">Gedung</label>
-                            <select id="gedung" name="gedung" class="w-full p-1 border rounded-md mb-2" required>
+                            <select id="gedung" name="gedung" class="w-full p-1 border rounded-md mb-2" required disabled>
                                 <option value="" disabled selected>Pilih Gedung</option>
-                                @foreach ($gedungs as $gedung)
-                                    <option value="{{ $gedung->gedung }}">{{ $gedung->gedung }}</option>
-                                @endforeach
                             </select>
                         </div>
-                    
-                        <!-- Nama Ruang Dropdown -->
+
+                        <!-- Room Dropdown -->
                         <div class="w-full">
                             <label for="room" class="block text-sm font-medium">Ruang</label>
-                            <select id="room" name="id_ruang" class="w-full p-2 border rounded-md mb-2" required>
+                            <select id="room" name="id_ruang" class="w-full p-1 border rounded-md mb-2" required disabled>
                                 <option value="" disabled selected>Pilih Ruang</option>
-                                @foreach ($rooms as $room)
-                                    <option value="{{ $room->id }}">{{ $room->nama_ruang }}</option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Get all necessary elements
+                            const startDateInput = document.getElementById('tanggal_start');
+                            const endDateInput = document.getElementById('tanggal_end');
+                            const clusterSelect = document.getElementById('cluster');
+                            const gedungSelect = document.getElementById('gedung');
+                            const roomSelect = document.getElementById('room');
+
+                            // Initially disable all dropdowns
+                            clusterSelect.disabled = true;
+                            gedungSelect.disabled = true;
+                            roomSelect.disabled = true;
+
+                            // Function to check dates and enable/disable cluster
+                            function checkDates() {
+                                const startDate = new Date(startDateInput.value);
+                                const endDate = new Date(endDateInput.value);
+
+                                if (startDateInput.value && endDateInput.value && startDate <= endDate) {
+                                    clusterSelect.disabled = false;
+                                } else {
+                                    clusterSelect.disabled = true;
+                                    // Reset and disable dependent dropdowns
+                                    clusterSelect.value = '';
+                                    gedungSelect.value = '';
+                                    roomSelect.value = '';
+                                    gedungSelect.disabled = true;
+                                    roomSelect.disabled = true;
+                                }
+                            }
+
+                            // Add event listeners to date inputs
+                            startDateInput.addEventListener('change', checkDates);
+                            endDateInput.addEventListener('change', checkDates);
+
+                            // Cluster change event
+                            clusterSelect.addEventListener('change', function() {
+                                const selectedCluster = this.value;
+                                
+                                // Reset and enable gedung dropdown
+                                gedungSelect.innerHTML = '<option value="" disabled selected>Pilih Gedung</option>';
+                                gedungSelect.disabled = false;
+
+                                // Reset and disable room dropdown
+                                roomSelect.innerHTML = '<option value="" disabled selected>Pilih Ruang</option>';
+                                roomSelect.disabled = true;
+
+                                // Fetch gedung options
+                                fetch(`/api/get-gedung?kluster=${selectedCluster}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        data.forEach(gedung => {
+                                            const option = document.createElement('option');
+                                            option.value = gedung;
+                                            option.textContent = gedung;
+                                            gedungSelect.appendChild(option);
+                                        });
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert('Failed to fetch gedung data');
+                                    });
+                            });
+
+                            // Gedung change event
+                            gedungSelect.addEventListener('change', function() {
+                                const selectedGedung = this.value;
+                                const selectedCluster = clusterSelect.value;
+                                
+                                console.log('Selected Cluster:', selectedCluster); // Debug log
+                                console.log('Selected Gedung:', selectedGedung);   // Debug log
+
+                                // Enable and reset room dropdown
+                                roomSelect.innerHTML = '<option value="" disabled selected>Pilih Ruang</option>';
+                                roomSelect.disabled = false;
+
+                                // Fetch room options
+                                fetch(`/api/get-rooms?kluster=${encodeURIComponent(selectedCluster)}&gedung=${encodeURIComponent(selectedGedung)}`)
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error(`HTTP error! status: ${response.status}`);
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log('Received room data:', data); // Debug log
+                                        if (data && data.length > 0) {
+                                            data.forEach(room => {
+                                                const option = document.createElement('option');
+                                                option.value = room.id;
+                                                option.textContent = room.nama_ruang;
+                                                roomSelect.appendChild(option);
+                                            });
+                                        } else {
+                                            console.log('No rooms found for this combination');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Detailed error:', error);
+                                        alert('Failed to fetch room data: ' + error.message);
+                                    });
+                            });
+                        });
+
+                    </script>
                 
                     <!-- Action Buttons -->
                     <div class="flex justify-end gap-2">

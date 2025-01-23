@@ -7,36 +7,96 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ruang;
+use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
 
 class BookingController extends Controller
 {
-    public function index(Request $request){
-        
+    private $gedungList = [
+        'Sumbing' => [
+            'I' => 'Sumbing I',
+            'II' => 'Sumbing II',
+            'III' => 'Sumbing III',
+            'IV' => 'Sumbing IV'
+        ],
+        'Muria' => [
+            'I' => 'Muria I',
+            'II' => 'Muria II'
+        ],
+        'Sindoro' => [
+            'I' => 'Sindoro I',
+            'II' => 'Sindoro II',
+            'III' => 'Sindoro III'
+        ],
+        'Merbabu' => [],
+        'Merapi' => ['Merapi']
+    ];
+
+    public function index(Request $request)
+    {
         $bookings = Booking::with('ruang')->get();
+        $klusters = array_keys($this->gedungList); // Get klusters from the array keys
+        $rooms = Ruang::all();
+        // Convert gedungList to a collection format that matches the view expectations
+        $gedungs = collect($this->gedungList)->map(function ($items, $kluster) {
+            return (object)['gedung' => $kluster];
+        });
         
-        if(Auth::guard('sup-admin')){
-            return view('superAdmin.booking.booking_ruang');
+        if(Auth::guard('sup-admin')->check()) {
+            return view('superAdmin.booking.booking_ruang', compact('bookings', 'klusters','gedungs', 'rooms'));
         }
-        elseif(Auth::guard('admin')){
-            return view('admin.booking.booking_ruang');
+        elseif(Auth::guard('admin')->check()) {
+            return view('admin.booking.booking_ruang', compact('bookings', 'klusters', 'gedungs', 'rooms'));
         }
     }
     public function create()
     {
-        // Ambil data kluster, gedung, dan ruang
         $klusters = Ruang::select('kluster')->distinct()->get();
         $gedungs = Ruang::select('gedung')->distinct()->get();
         $rooms = Ruang::all();
 
-        // Periksa role pengguna yang sedang login
-        if (Auth::guard('admin')) {
-            return view('admin.booking.booking_ruang', compact('klusters', 'gedungs', 'rooms'));
-        } elseif (Auth::guard('sup-admin')) {
+        if (Auth::guard('sup-admin')->check()) {
             return view('superAdmin.booking.booking_ruang', compact('klusters', 'gedungs', 'rooms'));
+        } elseif (Auth::guard('admin')->check()) {
+            return view('admin.booking.booking_ruang', compact('klusters', 'gedungs', 'rooms'));
+        }
+    }
+
+    public function getGedung(Request $request)
+    {
+        $gedungList = [
+            'Sumbing' => ['I', 'II', 'III', 'IV'],
+            'Muria' => ['I', 'II'],
+            'Sindoro' => ['I', 'II', 'III'],
+            'Merbabu' => [],
+            'Merapi' => []
+        ];
+
+        $kluster = $request->input('kluster');
+        return response()->json($gedungList[$kluster] ?? []);
+    }
+    
+    public function getRooms(Request $request)
+    {
+        // Log incoming request data
+        Log::info('getRooms called with:', $request->all());
+        
+        $kluster = $request->input('kluster');
+        $gedung = $request->input('gedung');
+        
+        // Validasi input
+        if (!$kluster || !$gedung) {
+            return response()->json(['error' => 'Kluster or Gedung is missing'], 400);
         }
 
-        abort(403, 'Akses ditolak.');
+        // Cari ruangan berdasarkan kluster dan gedung
+        $rooms = Ruang::where('kluster', $kluster)
+                    ->where('gedung', $gedung)
+                    ->get(['id', 'nama_ruang']); // Ambil hanya kolom yang diperlukan
+        
+        return response()->json($rooms);
+        
+        return response()->json($room ? [$room] : []);
     }
 
 

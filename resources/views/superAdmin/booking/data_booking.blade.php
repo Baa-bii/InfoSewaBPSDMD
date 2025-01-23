@@ -18,24 +18,30 @@
         <table class="w-full min-w-max table-auto bg-white border rounded-lg shadow-md">
             <thead class="bg-gray-700 text-white">
                 <tr class="border border-gray-300">
+                    <th class="p-2 text-left border-r border-white">Nama Pemesan</th>
                     <th class="p-2 text-left border-r border-white">Nama Ruang</th>
                     <th class="p-2 text-left border-r border-white">Kluster</th>
-                    <th class="p-2 text-left border-r border-white">Kapasitas</th>
+                    <th class="p-2 text-left border-r border-white">Gedung</th>
                     <th class="p-2 text-left border-r border-white">Tanggal Mulai</th>
                     <th class="p-2 text-left border-r border-white">Tanggal Selesai</th>
                     <th class="p-2 text-left border-r border-white">Status Pembayaran</th>
+                    <th class="p-2 text-left">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-300">
                 <!-- Contoh Data 1 -->
+                @foreach ($bookings as $book)
                 <tr>
-                    <td class="py-1 px-2 border-r border-gray-500">101</td>
-                    <td class="py-1 px-2 border-r border-gray-500">Sindoro I</td>
-                    <td class="py-1 px-2 border-r border-gray-500">5</td>
-                    <td class="py-1 px-2 border-r border-gray-500">10/1/2025</td>
-                    <td class="py-1 px-2 border-r border-gray-500">10/2/2025</td>
-                    <td class="py-1 px-2 text-red-500 font-medium">Belum Dibayar</td>
+                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->nama_pemesan }}</td>
+                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->nama_ruang }}</td>
+                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->kluster }}</td>
+                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->gedung }}</td>
+                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->tanggal_start }}</td>
+                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->tanggal_end }}</td>
+                    <td class="py-1 px-2 text-red-500 font-medium">{{ $book->status }}</td>
+                    <td class="py-1 px-2 text-blue-500 font-medium">Validasi</td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
     </main>
