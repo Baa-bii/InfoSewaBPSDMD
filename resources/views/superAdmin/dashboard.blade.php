@@ -84,9 +84,21 @@
 
 <script>
     function fetchBookingDates(year, month) {
-        fetch(`/api/bookings/${year}/${month}`)
-            .then(response => response.json())
+        // Add logging to see what's being sent
+        console.log(`Fetching bookings for year: ${year}, month: ${month + 1}`);
+        
+        // Make sure we're sending the correct month number (1-12)
+        const adjustedMonth = month + 1;
+        
+        fetch(`/api/bookings/${year}/${adjustedMonth}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(bookings => {
+                console.log('Received bookings:', bookings);
                 const bookedDates = bookings.map(booking => {
                     return {
                         start: new Date(booking.tanggal_start).getDate(),
@@ -94,6 +106,10 @@
                     };
                 });
                 generateCalendar(year, month, bookedDates);
+            })
+            .catch(error => {
+                console.error('Error fetching bookings:', error);
+                generateCalendar(year, month, []);
             });
     }
     function generateCalendar(year, month, bookedDates) {
@@ -151,23 +167,24 @@
           let currentMonth = currentDate.getMonth();
           fetchBookingDates(currentYear, currentMonth); // Mengambil data booking dan menampilkan kalender
     
-          document.getElementById('prevMonth').addEventListener('click', () => {
-              currentMonth--;
-              if (currentMonth < 0) {
-                  currentMonth = 11;
-                  currentYear--;
-              }
-              generateCalendar(currentYear, currentMonth);
-          });
-    
-          document.getElementById('nextMonth').addEventListener('click', () => {
-              currentMonth++;
-              if (currentMonth > 11) {
-                  currentMonth = 0;
-                  currentYear++;
-              }
-              generateCalendar(currentYear, currentMonth);
-          });
+          // Di bagian navigasi bulan
+            document.getElementById('prevMonth').addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                fetchBookingDates(currentYear, currentMonth);
+            });
+
+            document.getElementById('nextMonth').addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                fetchBookingDates(currentYear, currentMonth);
+            });
     
           function showModal(selectedDate) {
               const modal = document.getElementById('myModal');

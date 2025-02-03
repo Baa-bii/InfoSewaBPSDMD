@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use App\Http\Controllers\SuperAdmin\RuangController;
+use App\Http\Controllers\Admin\AdminRuangController;
 use App\Http\Controllers\SuperAdmin\UserController;
 
 Route::get('/', function () {
@@ -21,7 +22,7 @@ Route::get('/api/get-rooms', [BookingController::class, 'getRooms']);
 
 Route::group(['middleware'=>'auth:admin'], function(){
     Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.dashboard.index');
-    Route::get('/admin/data-ruang', [AdminController::class, 'data_ruang'])->name('admin.data-ruang');
+    Route::get('/admin/data-ruang', [AdminRuangController::class, 'index'])->name('admin.data-ruang');
     Route::get('/admin/booking-ruang', [BookingController::class, 'index'])->name('admin.booking-ruang');
     Route::get('/admin/booking-ruang/create', [BookingController::class, 'create'])->name('admin.booking.create');
     Route::post('/admin/booking-ruang/store', [BookingController::class, 'store'])->name('admin.booking.store');

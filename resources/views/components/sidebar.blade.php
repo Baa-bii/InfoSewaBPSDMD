@@ -11,7 +11,7 @@
                     <ul class="space-y-2">
                     @if($user ->role=== 'admin')
                         <!-- Dashboard -->
-                        <li class="hover:bg-gray-900 rounded-lg">
+                        <li class="{{ Route::is('admin.dashboard.index') ? 'bg-gray-900' : '' }} hover:bg-gray-900 rounded-lg">
                             <a href="{{ route('admin.dashboard.index') }}"
                                 class="flex items-center w-full text-base mt-4 px-4 py-4 font-medium rounded-lg text-gray-700 dark:text-white hover:text-white hover:bg-gray-900"
                             >
@@ -35,7 +35,7 @@
                         </li>
 
                         <!-- Dropdown Ruang -->
-                        <li class="relative">
+                        <li class="{{ Route::is('admin.data-ruang') ? 'bg-gray-900' : '' }} hover:bg-gray-900 rounded-lg relative">
                             <button
                                 onclick="toggleDropdown('dropdown-ruang')"
                                 class="flex items-center justify-between w-full text-base px-4 py-4 font-medium text-gray-700 dark:text-white hover:text-white hover:bg-gray-900 rounded-lg"
@@ -68,7 +68,7 @@
                                 id="dropdown-ruang"
                                 class="hidden mt-2 space-y-2 bg-gray-800 rounded-lg"
                             >
-                                <li>
+                                <li class="{{ Route::is('admin.data-ruang') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
                                     <a
                                         href="{{ route('admin.data-ruang') }}"
                                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
@@ -79,7 +79,7 @@
                             </ul>
                         </li>
                         <!--Booking-->
-                        <li class="relative">
+                        <li class="{{ Route::is('admin.booking-ruang') ? 'bg-gray-900' : '' }} hover:bg-gray-900 rounded-lg relative">
                             <button
                                 onclick="toggleDropdown('dropdown-booking')"
                                 class="flex items-center justify-between w-full text-base px-4 py-4 font-medium text-gray-700 dark:text-white hover:text-white hover:bg-gray-900 rounded-lg"
@@ -112,15 +112,15 @@
                                 id="dropdown-booking"
                                 class="hidden mt-2 space-y-2 bg-gray-800 rounded-lg"
                             >
-                                <li>
+                                <li class="{{ Route::is('admin.booking-ruang') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
                                     <a
                                         href="{{ route('admin.booking-ruang') }}"
-                                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
+                                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                                     >
                                         Booking Ruang
                                     </a>
                                 </li>
-                                <li>
+                                <li class="{{ Route::is('admin.booking-data') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
                                     <a
                                         href="{{ route('admin.booking-data') }}"
                                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
@@ -133,7 +133,7 @@
                     </ul>
                     @elseif ($user->role ==='sup-admin')
                     <!-- Dashboard -->
-                    <li class="hover:bg-gray-900 rounded-lg">
+                    <li class="{{ Route::is('sup-admin.dashboard.index') ? 'bg-gray-900' : '' }} hover:bg-gray-900 rounded-lg">
                         <a href="{{ route('sup-admin.dashboard.index') }}"
                             class="flex items-center w-full text-base mt-4 px-4 py-4 font-medium rounded-lg text-gray-700 dark:text-white hover:text-white hover:bg-gray-900"
                         >
@@ -157,7 +157,7 @@
                     </li>
 
                     <!-- Dropdown Ruang -->
-                    <li class="relative">
+                    <li class="{{ Route::is('sup-admin.ruang.index') ? 'bg-gray-900' : '' }} hover:bg-gray-900 rounded-lg relative">
                         <button
                             onclick="toggleDropdown('dropdown-ruang')"
                             class="flex items-center justify-between w-full text-base px-4 py-4 font-medium text-gray-700 dark:text-white hover:text-white hover:bg-gray-900 rounded-lg"
@@ -190,7 +190,7 @@
                             id="dropdown-ruang"
                             class="hidden mt-2 space-y-2 bg-gray-800 rounded-lg"
                         >
-                            <li>
+                            <li class="{{ Route::is('sup-admin.ruang.index') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
                                 <a
                                     href="{{ route('sup-admin.ruang.index') }}"
                                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
@@ -201,7 +201,7 @@
                         </ul>
                     </li>
                     <!--Booking-->
-                    <li class="relative">
+                    <li class="{{ Route::is(['sup-admin.booking-ruang', 'sup-admin.booking-data', 'sup-admin.booking-riwayat']) ? 'bg-gray-900' : '' }} hover:bg-gray-900 rounded-lg relative">
                         <button
                             onclick="toggleDropdown('dropdown-booking')"
                             class="flex items-center justify-between w-full text-base px-4 py-4 font-medium text-gray-700 dark:text-white hover:text-white hover:bg-gray-900 rounded-lg"
@@ -234,7 +234,7 @@
                             id="dropdown-booking"
                             class="hidden mt-2 space-y-2 bg-gray-800 rounded-lg"
                         >
-                            <li>
+                            <li class="{{ Route::is('sup-admin.booking-ruang') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
                                 <a
                                     href="{{ route('sup-admin.booking-ruang') }}"
                                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
@@ -242,7 +242,7 @@
                                     Booking Ruang
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ Route::is('sup-admin.booking-data') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
                                 <a
                                     href="{{ route('sup-admin.booking-data') }}"
                                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
@@ -250,7 +250,7 @@
                                     Data Booking
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ Route::is('sup-admin.booking-riwayat') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
                                 <a
                                     href="{{ route('sup-admin.booking-riwayat') }}"
                                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
@@ -261,7 +261,7 @@
                         </ul>
                     </li>
                     <!-- Data User -->
-                    <li class="hover:bg-gray-900 rounded-lg">
+                    <li class="{{ Route::is('sup-admin.user.index') ? 'bg-gray-900' : '' }} hover:bg-gray-900 rounded-lg">
                         <a href="{{ route('sup-admin.user.index') }}"
                             class="flex items-center w-full text-base mt-4 px-4 py-4 font-medium rounded-lg text-gray-700 dark:text-white hover:text-white hover:bg-gray-900"
                         >

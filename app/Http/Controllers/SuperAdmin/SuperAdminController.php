@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SuperAdminController extends Controller
 {
@@ -31,7 +32,31 @@ class SuperAdminController extends Controller
         }
     }
 
-
+    public function getBookingsByDate($date)
+    {
+        try {
+            $tanggal = Carbon::parse($date)->toDateString();
+            
+            // Log query yang dijalankan
+            Log::info("Tanggal yang dicari: " . $tanggal);
+            
+            $bookings = Booking::whereRaw("? BETWEEN tanggal_start AND tanggal_end", [$tanggal]);
+            
+            // Log query SQL yang dihasilkan
+            Log::info($bookings->toSql());
+            Log::info($bookings->getBindings());
+            
+            $result = $bookings->select('nama_ruang', 'kluster', 'gedung')->get();
+            
+            // Log hasil query
+            Log::info("Hasil query:", $result->toArray());
+            
+            return response()->json($result);
+        } catch (\Exception $e) {
+            Log::error("Error in getBookingsByDate: " . $e->getMessage());
+            return response()->json(['error' => 'Invalid date format'], 400);
+        }
+    }
 
     public function getBookingsForMonth(Request $request)
     {
