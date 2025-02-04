@@ -27,7 +27,15 @@
                     @csrf
                     <!-- Nama Pemesan -->
                     <label for="nama_pemesan" class="block text-sm font-medium">Nama Pemesan</label>
-                    <input id="nama_pemesan" name="nama_pemesan" type="text" class="w-fit p-1 border rounded-md mb-2">
+                    <input id="nama_pemesan" name="nama_pemesan" type="text" class="w-full p-1 border rounded-md mb-2" required>
+
+                    <!-- No KTP -->
+                    <label for="no_ktp" class="block text-sm font-medium">No KTP</label>
+                    <input id="no_ktp" name="no_ktp" type="text" class="w-full p-1 border rounded-md mb-2" required>
+
+                    <!-- No Hp -->
+                    <label for="no_hp" class="block text-sm font-medium">No HP</label>
+                    <input id="no_hp" name="no_hp" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- Tanggal Mulai dan Tanggal Akhir -->
                     <div class="flex space-x-4 mb-2">
@@ -138,43 +146,50 @@
                             });
 
                             // Gedung change event
-                            gedungSelect.addEventListener('change', function() {
+                            // Event saat "Gedung" berubah
+                            gedungSelect.addEventListener('change', function () {
                                 const selectedGedung = this.value;
                                 const selectedCluster = clusterSelect.value;
-                                
-                                console.log('Selected Cluster:', selectedCluster); // Debug log
-                                console.log('Selected Gedung:', selectedGedung);   // Debug log
+                                const tanggalStart = document.getElementById('tanggal_start').value; 
+                                const tanggalEnd = document.getElementById('tanggal_end').value; 
 
-                                // Enable and reset room dropdown
+                                console.log('Fetching available rooms with:', {
+                                    kluster: selectedCluster,
+                                    gedung: selectedGedung,
+                                    tanggal_start: tanggalStart,
+                                    tanggal_end: tanggalEnd
+                                });
+
+                                // Reset dropdown sebelum fetch
                                 roomSelect.innerHTML = '<option value="" disabled selected>Pilih Ruang</option>';
                                 roomSelect.disabled = false;
 
-                                // Fetch room options
-                                fetch(`/api/get-rooms?kluster=${encodeURIComponent(selectedCluster)}&gedung=${encodeURIComponent(selectedGedung)}`)
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error(`HTTP error! status: ${response.status}`);
-                                        }
-                                        return response.json();
-                                    })
-                                    .then(data => {
-                                        console.log('Received room data:', data); // Debug log
-                                        if (data && data.length > 0) {
-                                            data.forEach(room => {
-                                                const option = document.createElement('option');
-                                                option.value = room.id;
-                                                option.textContent = room.nama_ruang;
-                                                roomSelect.appendChild(option);
-                                            });
-                                        } else {
-                                            console.log('No rooms found for this combination');
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Detailed error:', error);
-                                        alert('Failed to fetch room data: ' + error.message);
-                                    });
+                                fetch(`/api/get-available-rooms?kluster=${encodeURIComponent(selectedCluster)}&gedung=${encodeURIComponent(selectedGedung)}&tanggal_start=${encodeURIComponent(tanggalStart)}&tanggal_end=${encodeURIComponent(tanggalEnd)}`)
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`HTTP error! status: ${response.status}`);
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log('Received available rooms:', data);
+                                    if (data.length > 0) {
+                                        data.forEach(room => {
+                                            const option = document.createElement('option');
+                                            option.value = room.id;
+                                            option.textContent = room.nama_ruang;
+                                            roomSelect.appendChild(option);
+                                        });
+                                    } else {
+                                        console.log('No available rooms found.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching available rooms:', error);
+                                    alert('Gagal mengambil data ruangan: ' + error.message);
+                                });
                             });
+
                         });
 
                     </script>

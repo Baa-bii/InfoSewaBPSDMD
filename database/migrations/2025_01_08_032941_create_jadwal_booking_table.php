@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('jadwal_booking', function (Blueprint $table) {
             $table->id();
             $table->string('nama_pemesan');
+            $table->string('no_hp');
+            $table->string('no_ktp');
             // Foreign Keys
             $table->unsignedBigInteger('id_ruang');
             $table->string('kluster');

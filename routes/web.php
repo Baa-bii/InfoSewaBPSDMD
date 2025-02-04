@@ -18,7 +18,7 @@ Route::post('/login', [AuthController::class, 'verify'])->name('auth.verify');
 
 Route::get('/api/bookings/{year}/{month}', [SuperAdminController::class, 'getBookingsForMonth']);
 Route::get('/api/get-gedung', [BookingController::class, 'getGedung']);
-Route::get('/api/get-rooms', [BookingController::class, 'getRooms']);
+Route::get('/api/get-available-rooms', [BookingController::class, 'getAvailableRooms']);
 
 Route::group(['middleware'=>'auth:admin'], function(){
     Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.dashboard.index');

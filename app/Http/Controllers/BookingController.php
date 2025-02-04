@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Ruang;
 use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
+use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
 {
@@ -76,28 +77,46 @@ class BookingController extends Controller
         return response()->json($gedungList[$kluster] ?? []);
     }
     
-    public function getRooms(Request $request)
+    public function getAvailableRooms(Request $request)
     {
-        // Log incoming request data
-        Log::info('getRooms called with:', $request->all());
-        
-        $kluster = $request->input('kluster');
-        $gedung = $request->input('gedung');
-        
-        // Validasi input
-        if (!$kluster || !$gedung) {
-            return response()->json(['error' => 'Kluster or Gedung is missing'], 400);
-        }
+        try {
+            Log::info('getAvailableRooms called with:', $request->all());
 
-        // Cari ruangan berdasarkan kluster dan gedung
-        $rooms = Ruang::where('kluster', $kluster)
-                    ->where('gedung', $gedung)
-                    ->get(['id', 'nama_ruang']); // Ambil hanya kolom yang diperlukan
-        
-        return response()->json($rooms);
-        
-        return response()->json($room ? [$room] : []);
+            $kluster = $request->input('kluster');
+            $gedung = $request->input('gedung');
+            $tanggal_start = $request->input('tanggal_start');
+            $tanggal_end = $request->input('tanggal_end');
+
+            if (!$kluster || !$gedung || !$tanggal_start || !$tanggal_end) {
+                return response()->json(['error' => 'Kluster, Gedung, Tanggal Start, atau Tanggal End tidak boleh kosong'], 400);
+            }
+
+            // Query Ruang yang tidak ada dalam Booking
+            $rooms = DB::table('ruang')
+                ->select('ruang.id', 'ruang.nama_ruang')
+                ->whereNotExists(function ($query) use ($tanggal_start, $tanggal_end) {
+                    $query->from('jadwal_booking')
+                        ->whereColumn('jadwal_booking.id_ruang', 'ruang.id')
+                        ->where(function ($q) use ($tanggal_start, $tanggal_end) {
+                            $q->whereBetween('jadwal_booking.tanggal_start', [$tanggal_start, $tanggal_end])
+                                ->orWhereBetween('jadwal_booking.tanggal_end', [$tanggal_start, $tanggal_end])
+                                ->orWhere(function ($inner) use ($tanggal_start, $tanggal_end) {
+                                    $inner->where('jadwal_booking.tanggal_start', '<=', $tanggal_start)
+                                        ->where('jadwal_booking.tanggal_end', '>=', $tanggal_end);
+                                });
+                        });
+                })
+                ->where('ruang.kluster', $kluster)
+                ->where('ruang.gedung', $gedung)
+                ->get();
+    
+            return response()->json($rooms);
+        } catch (\Exception $e) {
+            Log::error('Error in getAvailableRooms:', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return response()->json(['error' => 'Terjadi kesalahan server. Cek log untuk detail.'], 500);
+        }
     }
+
 
 
     /**
@@ -108,6 +127,8 @@ class BookingController extends Controller
         // Validasi data
         $validated = $request->validate([
             'nama_pemesan' => 'required|string|max:255',
+            'no_hp' => 'required|string|max:255',
+            'no_ktp' => 'required|string|max:255',
             'id_ruang' => 'required|exists:ruang,id',
             'tanggal_start' => 'required|date|after_or_equal:today',
             'tanggal_end' => 'required|date|after:tanggal_start',
@@ -133,6 +154,8 @@ class BookingController extends Controller
 
         Booking::create([
             'nama_pemesan' => $validated['nama_pemesan'],
+            'no_ktp' => $validated['no_ktp'],
+            'no_hp' => $validated['no_hp'],
             'id_ruang' => $ruang->id,
             'nama_ruang' => $ruang->nama_ruang,
             'kluster' => $ruang->kluster,
