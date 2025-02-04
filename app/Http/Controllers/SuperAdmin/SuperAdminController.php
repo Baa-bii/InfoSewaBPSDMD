@@ -10,6 +10,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
 
 class SuperAdminController extends Controller
 {
@@ -75,8 +76,32 @@ class SuperAdminController extends Controller
     }
 
     public function booking_data():View{
-        $bookings = Booking::all();
-        return view('superAdmin.booking.data_booking', compact('bookings'));
+        return view('superAdmin.booking.data_booking');
+    }
+
+    public function getData()
+    {
+        $bookings = Booking::select([
+            'id', 'nama_pemesan', 'nama_ruang', 'kluster', 'gedung', 'tanggal_start', 'tanggal_end', 'status'
+        ]);
+
+            return DataTables::of($bookings)
+            ->addColumn('validasi', function ($row) {
+                return '<button class="bg-blue-500 hover:bg-blue-700 px-1 m-1 rounded-lg text-white font-medium validasi-btn" onclick="validasi(' . $row->id . ')">'
+                    . ($row->status === 'belum' ? 'Validasi' : 'Validasi') .
+                    '</button>';
+            })
+            ->addColumn('status', function ($row) {
+                // Add the status column with a class to easily identify it
+                $statusClass = $row->status === 'belum' ? 'text-red-500' : 'text-green-500';
+                return '<span class="status-text ' . $statusClass . '">' . ($row->status === 'belum' ? 'Belum' : 'Sudah') . '</span>';
+            })
+            ->addColumn('aksi', function ($row) {
+                return '<button class="bg-green-500 hover:bg-green-600 rounded-md text-white px-1 font-medium" onclick="aksi(' . $row->id . ')">Edit</button> 
+                        <button class="bg-red-500 hover:bg-red-600 rounded-md text-white px-1 font-medium" onclick="aksi(' . $row->id . ')">Hapus</button>';
+            })
+            ->rawColumns(['aksi', 'validasi', 'status'])
+            ->make(true);
     }
 
     public function booking_riwayat():View{

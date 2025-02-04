@@ -37,6 +37,10 @@
                     <label for="no_hp" class="block text-sm font-medium">No HP</label>
                     <input id="no_hp" name="no_hp" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
+                    <!-- Keperluan -->
+                    <label for="keperluan" class="block text-sm font-medium">Keperluan</label>
+                    <input id="keperluan" name="keperluan" type="text" class="w-full p-1 border rounded-md mb-2" required>
+
                     <!-- Tanggal Mulai dan Tanggal Akhir -->
                     <div class="flex space-x-4 mb-2">
                         <div class="w-full">

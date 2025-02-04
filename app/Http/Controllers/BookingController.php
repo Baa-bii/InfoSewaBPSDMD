@@ -129,6 +129,7 @@ class BookingController extends Controller
             'nama_pemesan' => 'required|string|max:255',
             'no_hp' => 'required|string|max:255',
             'no_ktp' => 'required|string|max:255',
+            'keperluan' => 'required|string|max:255',
             'id_ruang' => 'required|exists:ruang,id',
             'tanggal_start' => 'required|date|after_or_equal:today',
             'tanggal_end' => 'required|date|after:tanggal_start',
@@ -156,6 +157,7 @@ class BookingController extends Controller
             'nama_pemesan' => $validated['nama_pemesan'],
             'no_ktp' => $validated['no_ktp'],
             'no_hp' => $validated['no_hp'],
+            'keperluan' => $validated['keperluan'],
             'id_ruang' => $ruang->id,
             'nama_ruang' => $ruang->nama_ruang,
             'kluster' => $ruang->kluster,
@@ -167,5 +169,17 @@ class BookingController extends Controller
         return redirect()->route(auth()->guard('admin')->check() ? 'admin.booking-ruang' : 'sup-admin.booking-ruang')
                      ->with('success', 'Booking berhasil dibuat!');
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $booking = Booking::findOrFail($id);
+        
+        // Toggle status
+        $booking->status = $booking->status === 'belum' ? 'sudah' : 'belum';
+        $booking->save();
+
+        return response()->json(['success' => true, 'status' => $booking->status]);
+    }
+
 
 }

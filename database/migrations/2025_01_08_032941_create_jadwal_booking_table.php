@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_pemesan');
             $table->string('no_hp');
             $table->string('no_ktp');
+            $table->string('keperluan');
             // Foreign Keys
             $table->unsignedBigInteger('id_ruang');
             $table->string('kluster');
