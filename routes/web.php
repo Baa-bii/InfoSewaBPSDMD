@@ -16,7 +16,9 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'verify'])->name('auth.verify');
 
-Route::get('/api/bookings/{year}/{month}', [SuperAdminController::class, 'getBookingsForMonth']);
+Route::get('/api/bookings/{year}/{month}', [SuperAdminController::class, 'index']);
+Route::get('/api/bookings', [SuperAdminController::class, 'getBookingsForMonth']);
+Route::get('/api/bookings/{date}', [SuperAdminController::class, 'getBookingsByDate']);
 Route::get('/api/get-gedung', [BookingController::class, 'getGedung']);
 Route::get('/api/get-available-rooms', [BookingController::class, 'getAvailableRooms']);
 Route::post('/booking/update-status/{id}', [BookingController::class, 'updateStatus'])->name('booking.updateStatus');
@@ -28,6 +30,7 @@ Route::group(['middleware'=>'auth:admin'], function(){
     Route::get('/admin/booking-ruang/create', [BookingController::class, 'create'])->name('admin.booking.create');
     Route::post('/admin/booking-ruang/store', [BookingController::class, 'store'])->name('admin.booking.store');
     Route::get('/admin/booking-data', [AdminController::class, 'booking_data'])->name('admin.booking-data');
+    Route::get('/admin/booking/booking_data', [SuperAdminController::class, 'getData'])->name('admin.get.data');
 });
 
 Route::group(['middleware'=>'auth:sup-admin'], function(){
@@ -37,6 +40,9 @@ Route::group(['middleware'=>'auth:sup-admin'], function(){
     Route::post('/sup-admin/booking-ruang/store', [BookingController::class, 'store'])->name('sup-admin.booking.store');
     Route::get('/sup-admin/booking', [SuperAdminController::class, 'booking_data'])->name('sup-admin.booking-data');
     Route::get('/sup-admin/booking/booking_data', [SuperAdminController::class, 'getData'])->name('sup-admin.get.data');
+    Route::get('/sup-admin/booking/{id}/edit', [BookingController::class, 'edit'])->name('sup-admin.booking.edit');
+    Route::put('/sup-admin/booking/{id}', [BookingController::class, 'update'])->name('sup-admin.booking.update');
+    Route::delete('/sup-admin/booking/{id}', [BookingController::class, 'destroy'])->name('sup-admin.booking.destroy');
     Route::get('/sup-admin/booking_riwayat', [SuperAdminController::class, 'booking_riwayat'])->name('sup-admin.booking-riwayat');
     Route::resource('/sup-admin/data-ruang', RuangController::class, [
         'names' => [

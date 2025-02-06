@@ -125,6 +125,7 @@
                                 const selectedCluster = this.value;
                                 
                                 // Reset and enable gedung dropdown
+                                gedungSelect.innerHTML = '';
                                 gedungSelect.innerHTML = '<option value="" disabled selected>Pilih Gedung</option>';
                                 gedungSelect.disabled = false;
 
@@ -136,6 +137,7 @@
                                 fetch(`/api/get-gedung?kluster=${selectedCluster}`)
                                     .then(response => response.json())
                                     .then(data => {
+                                        console.log('Data dari API:', data);
                                         data.forEach(gedung => {
                                             const option = document.createElement('option');
                                             option.value = gedung;
@@ -217,103 +219,113 @@
         </div>
         
         <div class=" grid grid-cols-5 grid-flow-row gap-4">
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sumbing I</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sumbing1.jpg" alt="sumbing1">
+                    <span class="text-white mx-2 text-lg font-semibold">Sumbing I</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp150.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 16</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sumbing II</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sumbing2.jpg" alt="sumbing2">
+                    <span class="text-white mx-2 text-lg font-semibold">Sumbing II</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 3</p>
+                        <p class="text-sm mx-2">Harga: Rp125.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 24</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sumbing III</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sumbing3.jpg" alt="sumbing3">
+                    <span class="text-white mx-2 text-lg font-semibold">Sumbing III</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 3</p>
+                        <p class="text-sm mx-2">Harga: Rp125.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 32</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sumbing IV</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sumbing4.jpg" alt="sumbing4">
+                    <span class="text-white mx-2 text-lg font-semibold">Sumbing IV</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp150.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 24</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Muria I</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/muria1.jpg" alt="muria1">
+                    <span class="text-white mx-2 text-lg font-semibold">Muria I</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp200.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 22</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Muria II</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/muria2.jpg" alt="muria2">
+                    <span class="text-white mx-2 text-lg font-semibold">Muria II</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp200.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 15</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-md p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sindoro I</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sindoro1.jpg" alt="sindoro1">
+                    <span class="text-white mx-2 text-lg font-semibold">Sindoro I</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp150.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 48</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-md p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sindoro II</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sindoro2.jpg" alt="sindoro2">
+                    <span class="text-white mx-2 text-lg font-semibold">Sindoro II</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 4</p>
+                        <p class="text-sm mx-2">Harga: Rp100.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 45</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-md p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sindoro III</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sindoro3.jpg" alt="sindoro3">
+                    <span class="text-white mx-2 text-lg font-semibold">Sindoro III</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp150.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 48</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-md p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Merapi</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/merapi.jpg" alt="merapi">
+                    <span class="text-white mx-2 text-lg font-semibold">Merapi</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp200.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 50</p>
                     </div>
                 </div>
             </div>

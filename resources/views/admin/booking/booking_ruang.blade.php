@@ -15,7 +15,7 @@
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
         <div class="bg-blue-500 p-2 mb-4 font-sans text-white font-medium cursor-pointer text-md w-fit rounded-md shadow-md hover:bg-blue-700" id="openModal"
-        onclick="loadBookingForm('{{ route('sup-admin.booking.create') }}')">
+        onclick="loadBookingForm('{{ route('admin.booking.create') }}')">
             + Booking Ruang
         </div>
 
@@ -23,11 +23,23 @@
         <div id="bookingModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
             <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full h-fit">
                 <h2 class="text-xl font-bold mb-4">Booking Ruang</h2>
-                <form action="{{ route('sup-admin.booking.store') }}" method="POST">
+                <form action="{{ route('admin.booking.store') }}" method="POST">
                     @csrf
                     <!-- Nama Pemesan -->
                     <label for="nama_pemesan" class="block text-sm font-medium">Nama Pemesan</label>
-                    <input id="nama_pemesan" name="nama_pemesan" type="text" class="w-fit p-1 border rounded-md mb-2">
+                    <input id="nama_pemesan" name="nama_pemesan" type="text" class="w-full p-1 border rounded-md mb-2" required>
+
+                    <!-- No KTP -->
+                    <label for="no_ktp" class="block text-sm font-medium">No KTP</label>
+                    <input id="no_ktp" name="no_ktp" type="text" class="w-full p-1 border rounded-md mb-2" required>
+
+                    <!-- No Hp -->
+                    <label for="no_hp" class="block text-sm font-medium">No HP</label>
+                    <input id="no_hp" name="no_hp" type="text" class="w-full p-1 border rounded-md mb-2" required>
+
+                    <!-- Keperluan -->
+                    <label for="keperluan" class="block text-sm font-medium">Keperluan</label>
+                    <input id="keperluan" name="keperluan" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- Tanggal Mulai dan Tanggal Akhir -->
                     <div class="flex space-x-4 mb-2">
@@ -138,46 +150,62 @@
                             });
 
                             // Gedung change event
-                            gedungSelect.addEventListener('change', function() {
+                            // Event saat "Gedung" berubah
+                            gedungSelect.addEventListener('change', function () {
                                 const selectedGedung = this.value;
                                 const selectedCluster = clusterSelect.value;
-                                
-                                console.log('Selected Cluster:', selectedCluster); // Debug log
-                                console.log('Selected Gedung:', selectedGedung);   // Debug log
+                                const tanggalStart = document.getElementById('tanggal_start').value; 
+                                const tanggalEnd = document.getElementById('tanggal_end').value; 
 
-                                // Enable and reset room dropdown
+                                console.log('Fetching available rooms with:', {
+                                    kluster: selectedCluster,
+                                    gedung: selectedGedung,
+                                    tanggal_start: tanggalStart,
+                                    tanggal_end: tanggalEnd
+                                });
+
+                                // Reset dropdown sebelum fetch
                                 roomSelect.innerHTML = '<option value="" disabled selected>Pilih Ruang</option>';
                                 roomSelect.disabled = false;
 
-                                // Fetch room options
-                                fetch(`/api/get-rooms?kluster=${encodeURIComponent(selectedCluster)}&gedung=${encodeURIComponent(selectedGedung)}`)
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error(`HTTP error! status: ${response.status}`);
-                                        }
-                                        return response.json();
-                                    })
-                                    .then(data => {
-                                        console.log('Received room data:', data); // Debug log
-                                        if (data && data.length > 0) {
-                                            data.forEach(room => {
-                                                const option = document.createElement('option');
-                                                option.value = room.id;
-                                                option.textContent = room.nama_ruang;
-                                                roomSelect.appendChild(option);
-                                            });
-                                        } else {
-                                            console.log('No rooms found for this combination');
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Detailed error:', error);
-                                        alert('Failed to fetch room data: ' + error.message);
-                                    });
+                                fetch(`/api/get-available-rooms?kluster=${encodeURIComponent(selectedCluster)}&gedung=${encodeURIComponent(selectedGedung)}&tanggal_start=${encodeURIComponent(tanggalStart)}&tanggal_end=${encodeURIComponent(tanggalEnd)}`)
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`HTTP error! status: ${response.status}`);
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log('Received available rooms:', data);
+                                    if (data.length > 0) {
+                                        data.forEach(room => {
+                                            const option = document.createElement('option');
+                                            option.value = room.id;
+                                            option.textContent = room.nama_ruang;
+                                            roomSelect.appendChild(option);
+                                        });
+                                    } else {
+                                        console.log('No available rooms found.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching available rooms:', error);
+                                    alert('Gagal mengambil data ruangan: ' + error.message);
+                                });
                             });
+
                         });
 
                     </script>
+                    @if ($errors->any())
+                    <div class="alert alert-danger text-red-400">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                 
                     <!-- Action Buttons -->
                     <div class="flex justify-end gap-2">
@@ -189,103 +217,113 @@
         </div>
         
         <div class=" grid grid-cols-5 grid-flow-row gap-4">
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sumbing I</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sumbing1.jpg" alt="sumbing1">
+                    <span class="text-white mx-2 text-lg font-semibold">Sumbing I</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp150.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 16</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sumbing II</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sumbing2.jpg" alt="sumbing2">
+                    <span class="text-white mx-2 text-lg font-semibold">Sumbing II</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 3</p>
+                        <p class="text-sm mx-2">Harga: Rp125.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 24</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sumbing III</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sumbing3.jpg" alt="sumbing3">
+                    <span class="text-white mx-2 text-lg font-semibold">Sumbing III</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 3</p>
+                        <p class="text-sm mx-2">Harga: Rp125.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 32</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sumbing IV</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sumbing4.jpg" alt="sumbing4">
+                    <span class="text-white mx-2 text-lg font-semibold">Sumbing IV</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp150.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 24</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Muria I</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/muria1.jpg" alt="muria1">
+                    <span class="text-white mx-2 text-lg font-semibold">Muria I</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp200.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 22</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Muria II</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/muria2.jpg" alt="muria2">
+                    <span class="text-white mx-2 text-lg font-semibold">Muria II</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp200.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 15</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-md p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sindoro I</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sindoro1.jpg" alt="sindoro1">
+                    <span class="text-white mx-2 text-lg font-semibold">Sindoro I</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp150.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 48</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-md p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sindoro II</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sindoro2.jpg" alt="sindoro2">
+                    <span class="text-white mx-2 text-lg font-semibold">Sindoro II</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 4</p>
+                        <p class="text-sm mx-2">Harga: Rp100.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 45</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-md p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Sindoro III</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/sindoro3.jpg" alt="sindoro3">
+                    <span class="text-white mx-2 text-lg font-semibold">Sindoro III</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp150.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 48</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-200 w-fit h-auto shadow-md p-2 rounded-md flex flex-row">
+            <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
                 <div class="flex-col">
-                    <img class=" border-2 border-white rounded-md" src="/assets/room.jpg" alt="Sindoro">
-                    <span class="text-gray-800 mx-2 text-lg font-semibold">Merapi</span>
-                    <div>
-                        <p class="text-sm m-2">Kapasitas:</p>
-                        <p class="text-sm m-2">Harga:</p>
+                    <img class=" border-2 border-white rounded-md" src="/assets/merapi.jpg" alt="merapi">
+                    <span class="text-white mx-2 text-lg font-semibold">Merapi</span>
+                    <div class="text-white">
+                        <p class="text-sm mx-2">Kapasitas: 2</p>
+                        <p class="text-sm mx-2">Harga: Rp200.000</p>
+                        <p class="text-sm mx-2">Jumlah kamar: 50</p>
                     </div>
                 </div>
             </div>

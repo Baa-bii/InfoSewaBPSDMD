@@ -15,7 +15,6 @@ class AdminRuangController extends Controller
             'Sumbing' => ['I', 'II', 'III', 'IV'],
             'Muria' => ['I', 'II'],
             'Sindoro' => ['I', 'II', 'III'],
-            'Merbabu' => [],
             'Merapi' => [],
         ];
 
@@ -62,7 +61,6 @@ class AdminRuangController extends Controller
             'Sumbing' => ['I', 'II', 'III', 'IV'],
             'Muria' => ['I', 'II'],
             'Sindoro' => ['I', 'II', 'III'],
-            'Merbabu' => [],
             'Merapi' => [],
         ];
 

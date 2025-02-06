@@ -84,13 +84,9 @@
 
 <script>
     function fetchBookingDates(year, month) {
-        // Add logging to see what's being sent
         console.log(`Fetching bookings for year: ${year}, month: ${month + 1}`);
         
-        // Make sure we're sending the correct month number (1-12)
-        const adjustedMonth = month + 1;
-        
-        fetch(`/api/bookings/${year}/${adjustedMonth}`)
+        fetch(`/api/bookings?year=${year}&month=${month + 1}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -99,108 +95,203 @@
             })
             .then(bookings => {
                 console.log('Received bookings:', bookings);
-                const bookedDates = bookings.map(booking => {
-                    return {
-                        start: new Date(booking.tanggal_start).getDate(),
-                        end: new Date(booking.tanggal_end).getDate()
-                    };
-                });
+
+                // Transform the booking dates
+                const bookedDates = bookings.map(booking => ({
+                    start: new Date(booking.tanggal_start).getDate(),
+                    end: new Date(booking.tanggal_end).getDate()
+                }));
+
+                console.log('Processed bookedDates:', bookedDates);
                 generateCalendar(year, month, bookedDates);
             })
             .catch(error => {
                 console.error('Error fetching bookings:', error);
+                // If there's an error, still generate the calendar but without bookings
                 generateCalendar(year, month, []);
             });
     }
-    function generateCalendar(year, month, bookedDates) {
-              const calendarElement = document.getElementById('calendar');
-              const currentMonthElement = document.getElementById('currentMonth');
-              
-              const firstDayOfMonth = new Date(year, month, 1);
-              const daysInMonth = new Date(year, month + 1, 0).getDate();
-              
-              calendarElement.innerHTML = '';
-              const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-              currentMonthElement.innerText = `${monthNames[month]} ${year}`;
-              
-              const firstDayOfWeek = firstDayOfMonth.getDay();
-              const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-              daysOfWeek.forEach(day => {
-                  const dayElement = document.createElement('div');
-                  dayElement.className = 'text-center font-semibold';
-                  dayElement.style.fontSize = '15px';
-                  dayElement.innerText = day;
-                  calendarElement.appendChild(dayElement);
-              });
-    
-              for (let i = 0; i < firstDayOfWeek; i++) {
-                  const emptyDayElement = document.createElement('div');
-                  calendarElement.appendChild(emptyDayElement);
-              }
-    
-              for (let day = 1; day <= daysInMonth; day++) {
-                  const dayElement = document.createElement('div');
-                  dayElement.className = 'text-center text-gray-700 py-2 hover:bg-gray-400 hover:text-white font-semibold cursor-pointer rounded-md';
-                  dayElement.style.fontSize = '13px';
-                  dayElement.innerText = day;
-    
-                  const currentDate = new Date();
-                  if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDate()) {
-                      dayElement.classList.add('bg-blue-400', 'text-white', 'hover:bg-blue-600');
-                  }
 
-                  // Cek jika tanggal tersebut ada di dalam daftar bookedDates
-                    bookedDates.forEach(bookedDate => {
-                        if (day >= bookedDate.start && day <= bookedDate.end) {
-                            dayElement.classList.add('bg-red-500', 'text-white'); // Tandai tanggal yang sudah dibooking
-                        }
+    function fetchBookingForDate(year, month, day) {
+        // Format tanggal ke YYYY-MM-DD
+        const formattedMonth = (month + 1).toString().padStart(2, '0');
+        const formattedDay = day.toString().padStart(2, '0');
+        const dateString = `${year}-${formattedMonth}-${formattedDay}`;
+
+        // Log URL yang akan dipanggil
+        console.log('Fetching URL:', `/api/bookings/${dateString}`);
+
+        // Tambahkan loading state
+        const tbody = document.querySelector('#myModal tbody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="3" class="py-2 text-center">
+                    <div class="animate-pulse">Mengambil data...</div>
+                </td>
+            </tr>
+        `;
+
+        // Lakukan fetch dengan debugging
+        fetch(`/api/bookings/${dateString}`)
+            .then(response => {
+                // Log response status dan headers
+                console.log('Response status:', response.status);
+                console.log('Response headers:', Array.from(response.headers.entries()));
+                
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.log('Error response body:', text);
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     });
-
-                  dayElement.addEventListener('click', () => showModal(`${day} ${monthNames[month]}, ${year}`));
-    
-                  calendarElement.appendChild(dayElement);
-              }
-          }
-    
-          const currentDate = new Date();
-          let currentYear = currentDate.getFullYear();
-          let currentMonth = currentDate.getMonth();
-          fetchBookingDates(currentYear, currentMonth); // Mengambil data booking dan menampilkan kalender
-    
-          // Di bagian navigasi bulan
-            document.getElementById('prevMonth').addEventListener('click', () => {
-                currentMonth--;
-                if (currentMonth < 0) {
-                    currentMonth = 11;
-                    currentYear--;
                 }
-                fetchBookingDates(currentYear, currentMonth);
+                return response.json();
+            })
+            .then(bookings => {
+                console.log('Received bookings:', bookings);
+                tbody.innerHTML = '';
+
+                if (bookings && bookings.length > 0) {
+                    bookings.forEach(booking => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="py-1 px-2 border-r border-gray-300">${booking.nama_ruang || '-'}</td>
+                            <td class="py-1 px-2 border-r border-gray-300">${booking.kluster || '-'}</td>
+                            <td class="py-1 px-2">${booking.gedung || '-'}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="3" class="py-2 text-center">
+                                Tidak ada booking untuk tanggal ini.
+                            </td>
+                        </tr>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error details:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="py-2 text-center text-red-500">
+                            Terjadi kesalahan saat mengambil data booking. 
+                        </td>
+                    </tr>
+                `;
+            });
+    }
+
+    function generateCalendar(year, month, bookedDates) {
+        const calendarElement = document.getElementById('calendar');
+        const currentMonthElement = document.getElementById('currentMonth');
+        
+        const firstDayOfMonth = new Date(year, month, 1);
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        
+        // Clear existing calendar content
+        calendarElement.innerHTML = '';
+        
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        currentMonthElement.innerText = `${monthNames[month]} ${year}`;
+        
+        // Add day headers
+        const daysOfWeek = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+        daysOfWeek.forEach(day => {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'text-center font-semibold p-2 bg-gray-100';
+            dayElement.style.fontSize = '15px';
+            dayElement.innerText = day;
+            calendarElement.appendChild(dayElement);
+        });
+
+        // Add empty cells for days before the first day of the month
+        const firstDayOfWeek = firstDayOfMonth.getDay();
+        for (let i = 0; i < firstDayOfWeek; i++) {
+            const emptyDayElement = document.createElement('div');
+            emptyDayElement.className = 'p-2';
+            calendarElement.appendChild(emptyDayElement);
+        }
+
+        // Add calendar days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'text-center p-2 hover:bg-gray-200 cursor-pointer transition-colors duration-200 border border-gray-100';
+            dayElement.style.fontSize = '13px';
+            
+            // Create inner div for better styling
+            const innerDiv = document.createElement('div');
+            innerDiv.className = 'w-full h-full rounded-md p-2';
+            innerDiv.innerText = day;
+            
+            // Check if it's current date
+            const currentDate = new Date();
+            if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDate()) {
+                innerDiv.classList.add('bg-blue-500', 'text-white');
+            }
+
+            // Check if date is booked
+            if (bookedDates && bookedDates.length > 0) {
+                bookedDates.forEach(bookedDate => {
+                    if (day >= bookedDate.start && day <= bookedDate.end) {
+                        innerDiv.classList.add('bg-red-500', 'text-white');
+                    }
+                });
+            }
+
+            dayElement.appendChild(innerDiv);
+
+            // Add click event
+            dayElement.addEventListener('click', () => {
+                showModal(`${day} ${monthNames[month]} ${year}`);
+                fetchBookingForDate(year, month, day);
             });
 
-            document.getElementById('nextMonth').addEventListener('click', () => {
-                currentMonth++;
-                if (currentMonth > 11) {
-                    currentMonth = 0;
-                    currentYear++;
-                }
-                fetchBookingDates(currentYear, currentMonth);
-            });
+            calendarElement.appendChild(dayElement);
+        }
+
+        // Update calendar grid styling
+        calendarElement.className = 'grid grid-cols-7 gap-1 p-2';
+    }
+
+    function showModal(selectedDate) {
+        const modal = document.getElementById('myModal');
+        const modalDateElement = document.getElementById('modalDate');
+        modalDateElement.innerText = selectedDate;
+        modal.classList.remove('hidden');
+    }
     
-          function showModal(selectedDate) {
-              const modal = document.getElementById('myModal');
-              const modalDateElement = document.getElementById('modalDate');
-              modalDateElement.innerText = selectedDate;
-              modal.classList.remove('hidden');
-          }
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('myModal').classList.add('hidden');
+        });
     
-          document.getElementById('closeModal').addEventListener('click', () => {
-              document.getElementById('myModal').classList.add('hidden');
-          });
-    
-    
-      if(document.getElementById("column-chart") && typeof ApexCharts !== 'undefined') {
-        const chart = new ApexCharts(document.getElementById("column-chart"), options);
-        chart.render();
-      }
-    
+        // Initialize the calendar
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        
+        // Initial load
+        fetchBookingDates(currentYear, currentMonth);
+
+        // Set up navigation buttons
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            fetchBookingDates(currentYear, currentMonth);
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            fetchBookingDates(currentYear, currentMonth);
+        });
+    });
+          
     </script>

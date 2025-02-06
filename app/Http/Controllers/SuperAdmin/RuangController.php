@@ -18,7 +18,6 @@ class RuangController extends Controller
             'Sumbing' => ['I', 'II', 'III', 'IV'],
             'Muria' => ['I', 'II'],
             'Sindoro' => ['I', 'II', 'III'],
-            'Merbabu' => [],
             'Merapi' => [],
         ];
 
@@ -59,16 +58,12 @@ class RuangController extends Controller
         return view('superAdmin.data_ruang', compact('ruang', 'klusters', 'gedungList'));
     }
 
-
-
-    // RuangKelasController.php
     public function getGedung($kluster)
     {
         $gedungList = [
             'Sumbing' => ['I', 'II', 'III', 'IV'],
             'Muria' => ['I', 'II'],
             'Sindoro' => ['I', 'II', 'III'],
-            'Merbabu' => [],
             'Merapi' => [],
         ];
 

@@ -29,8 +29,9 @@ class BookingController extends Controller
             'II' => 'Sindoro II',
             'III' => 'Sindoro III'
         ],
-        'Merbabu' => [],
-        'Merapi' => ['Merapi']
+        'Merapi' => [
+            'I'=>'Merapi'
+        ]
     ];
 
     public function index(Request $request)
@@ -69,8 +70,7 @@ class BookingController extends Controller
             'Sumbing' => ['I', 'II', 'III', 'IV'],
             'Muria' => ['I', 'II'],
             'Sindoro' => ['I', 'II', 'III'],
-            'Merbabu' => [],
-            'Merapi' => []
+            'Merapi' => ['I']
         ];
 
         $kluster = $request->input('kluster');
@@ -179,6 +179,38 @@ class BookingController extends Controller
         $booking->save();
 
         return response()->json(['success' => true, 'status' => $booking->status]);
+    }
+
+    public function edit($id)
+    {
+        $booking = Booking::findOrFail($id);
+        return response()->json($booking);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_pemesan' => 'required|string|max:255',
+            'no_ktp' => 'required|string|max:16',
+            'no_hp' => 'required|string|max:15',
+            'keperluan' => 'required|string',
+            'tanggal_start' => 'required|date',
+            'tanggal_end' => 'required|date|after_or_equal:tanggal_start',
+            'status' => 'required|string|in:belum,sudah',
+        ]);
+
+        $booking = Booking::findOrFail($id);
+        $booking->update($request->all());
+
+        return redirect()->back()->with('success', 'Booking updated successfully');
+    }
+
+    public function destroy($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+
+        return response()->json(['message' => 'Booking deleted successfully']);
     }
 
 

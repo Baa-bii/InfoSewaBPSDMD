@@ -26,36 +26,36 @@ class SuperAdminController extends Controller
         })->get();
 
         // Return view dengan data bookings
-        if (Auth::guard('sup-admin')->check()) {
+
             return view('superAdmin.dashboard', compact('bookings'));
-        } elseif (Auth::guard('admin')->check()) {
-            return view('admin.dashboard', compact('bookings'));
-        }
     }
 
     public function getBookingsByDate($date)
     {
         try {
-            $tanggal = Carbon::parse($date)->toDateString();
+            // Validasi format tanggal
+            if (!strtotime($date)) {
+                throw new \Exception('Invalid date format');
+            }
+
+            $tanggal = Carbon::createFromFormat('Y-m-d', $date);
             
-            // Log query yang dijalankan
-            Log::info("Tanggal yang dicari: " . $tanggal);
+            Log::info("Tanggal yang dicari: " . $tanggal->toDateString());
             
-            $bookings = Booking::whereRaw("? BETWEEN tanggal_start AND tanggal_end", [$tanggal]);
+            $bookings = Booking::whereRaw("? BETWEEN tanggal_start AND tanggal_end", [$tanggal->toDateString()])
+                ->select('nama_ruang', 'kluster', 'gedung')
+                ->get();
             
-            // Log query SQL yang dihasilkan
-            Log::info($bookings->toSql());
-            Log::info($bookings->getBindings());
+            Log::info("Hasil query:", $bookings->toArray());
             
-            $result = $bookings->select('nama_ruang', 'kluster', 'gedung')->get();
-            
-            // Log hasil query
-            Log::info("Hasil query:", $result->toArray());
-            
-            return response()->json($result);
+            return response()->json($bookings);
+                
         } catch (\Exception $e) {
             Log::error("Error in getBookingsByDate: " . $e->getMessage());
-            return response()->json(['error' => 'Invalid date format'], 400);
+            return response()->json(
+                ['error' => 'Invalid date format'], 
+                400
+            );
         }
     }
 
@@ -85,24 +85,24 @@ class SuperAdminController extends Controller
             'id', 'nama_pemesan', 'nama_ruang', 'kluster', 'gedung', 'tanggal_start', 'tanggal_end', 'status'
         ]);
 
-            return DataTables::of($bookings)
+        return DataTables::of($bookings)
             ->addColumn('validasi', function ($row) {
                 return '<button class="bg-blue-500 hover:bg-blue-700 px-1 m-1 rounded-lg text-white font-medium validasi-btn" onclick="validasi(' . $row->id . ')">'
                     . ($row->status === 'belum' ? 'Validasi' : 'Validasi') .
                     '</button>';
             })
             ->addColumn('status', function ($row) {
-                // Add the status column with a class to easily identify it
                 $statusClass = $row->status === 'belum' ? 'text-red-500' : 'text-green-500';
                 return '<span class="status-text ' . $statusClass . '">' . ($row->status === 'belum' ? 'Belum' : 'Sudah') . '</span>';
             })
             ->addColumn('aksi', function ($row) {
-                return '<button class="bg-green-500 hover:bg-green-600 rounded-md text-white px-1 font-medium" onclick="aksi(' . $row->id . ')">Edit</button> 
-                        <button class="bg-red-500 hover:bg-red-600 rounded-md text-white px-1 font-medium" onclick="aksi(' . $row->id . ')">Hapus</button>';
+                return '<button id="openEditModal" class="bg-green-500 hover:bg-green-600 rounded-md text-white px-1 font-medium" onclick="editBooking(' . $row->id . ')">Edit</button> 
+                        <button class="bg-red-500 hover:bg-red-600 rounded-md text-white px-1 font-medium" onclick="openDeleteModal(' . $row->id . ')">Hapus</button>';
             })
             ->rawColumns(['aksi', 'validasi', 'status'])
             ->make(true);
     }
+
 
     public function booking_riwayat():View{
         return view('superAdmin.booking.riwayat_booking');

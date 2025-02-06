@@ -16,6 +16,9 @@
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
         <div>
             <div>
+                <h2 class="text-gray-700 m-2 font-semibold text-lg">Data Ruang Asrama</h2>
+            </div>
+            <div>
                 <form class="flex flex-row m-2">
                     @csrf
                     <div class="border-2 border-gray-400 w-fit rounded-md ml-3 text-sm">

@@ -7,42 +7,48 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
     <link rel="icon" href="{{ asset('assets/logo-bpsdmd.png') }}?v=2" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 </head>
 <body class="antialiased flex flex-col min-h-screen">
     <x-header></x-header>
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
         <h2 class="font-sans text-gray-700 m-2 font-medium">Data Booking</h2>
-        <table class="w-full min-w-max table-auto bg-white border rounded-lg shadow-md">
-            <thead class="bg-gray-700 text-white">
-                <tr class="border border-gray-300">
-                    <th class="p-2 text-left border-r border-white">Nama Pemesan</th>
-                    <th class="p-2 text-left border-r border-white">Nama Ruang</th>
-                    <th class="p-2 text-left border-r border-white">Kluster</th>
-                    <th class="p-2 text-left border-r border-white">Gedung</th>
-                    <th class="p-2 text-left border-r border-white">Tanggal Mulai</th>
-                    <th class="p-2 text-left border-r border-white">Tanggal Selesai</th>
-                    <th class="p-2 text-left ">Status Pembayaran</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-300">
-                <!-- Contoh Data 1 -->
-                @foreach ($bookings as $book)
+        <table id="bookingTable" class="w-full min-w-max table-auto bg-white border rounded-lg shadow-md">
+            <thead class="bg-gray-700 text-white p-1 ml-2">
                 <tr>
-                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->nama_pemesan }}</td>
-                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->nama_ruang }}</td>
-                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->kluster }}</td>
-                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->gedung }}</td>
-                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->tanggal_start }}</td>
-                    <td class="py-1 px-2 border-r border-gray-500">{{ $book->tanggal_end }}</td>
-                    <td class="py-1 px-2 text-red-500 font-medium">{{ $book->status }}</td>
-                </tr>
-                @endforeach
-            </tbody>
+                    <th class="p-1 text-left border-r border-white">Nama Pemesan</th>
+                    <th class="p-1 text-left border-r border-white">Nama Ruang</th>
+                    <th class="p-1 text-left border-r border-white">Kluster</th>
+                    <th class="p-1 text-left border-r border-white">Gedung</th>
+                    <th class="p-1 text-left border-r border-white">Tanggal Mulai</th>
+                    <th class="p-1 text-left border-r border-white">Tanggal Selesai</th>
+                    <th class="p-1 text-left">Status</th>
+            </thead>
         </table>
     </main>
     <x-footer></x-footer>
+
+    <script>
+        $(document).ready(function () {
+            $('#bookingTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('admin.get.data') }}',
+                columns: [
+                    { data: 'nama_pemesan', name: 'nama_pemesan' },
+                    { data: 'nama_ruang', name: 'nama_ruang' },
+                    { data: 'kluster', name: 'kluster' },
+                    { data: 'gedung', name: 'gedung' },
+                    { data: 'tanggal_start', name: 'tanggal_start' },
+                    { data: 'tanggal_end', name: 'tanggal_end' },
+                    { data: 'status', name: 'status' },
+                ]
+            });
+        });
+    </script>
 </body>
 </html>
