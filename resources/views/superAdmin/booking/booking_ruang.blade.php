@@ -26,29 +26,29 @@
                 <form action="{{ route('sup-admin.booking.store') }}" method="POST">
                     @csrf
                     <!-- Nama Pemesan -->
-                    <label for="nama_pemesan" class="block text-sm font-medium">Nama Pemesan</label>
+                    <label for="nama_pemesan" class="block text-sm font-medium">Nama Pemesan <span class="text-red-400">*</span></label>
                     <input id="nama_pemesan" name="nama_pemesan" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- No KTP -->
-                    <label for="no_ktp" class="block text-sm font-medium">No KTP</label>
+                    <label for="no_ktp" class="block text-sm font-medium">No KTP <span class="text-red-400">*</span></label>
                     <input id="no_ktp" name="no_ktp" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- No Hp -->
-                    <label for="no_hp" class="block text-sm font-medium">No HP</label>
+                    <label for="no_hp" class="block text-sm font-medium">No HP <span class="text-red-400">*</span></label>
                     <input id="no_hp" name="no_hp" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- Keperluan -->
-                    <label for="keperluan" class="block text-sm font-medium">Keperluan</label>
+                    <label for="keperluan" class="block text-sm font-medium">Keperluan <span class="text-red-400">*</span></label>
                     <input id="keperluan" name="keperluan" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- Tanggal Mulai dan Tanggal Akhir -->
                     <div class="flex space-x-4 mb-2">
                         <div class="w-full">
-                            <label for="tanggal_start" class="block text-sm font-medium">Tanggal Mulai</label>
+                            <label for="tanggal_start" class="block text-sm font-medium">Tanggal Mulai <span class="text-red-400">*</span></label>
                             <input id="tanggal_start" name="tanggal_start" type="date" class="w-full p-1 border rounded-md">
                         </div>
                         <div class="w-full">
-                            <label for="tanggal_end" class="block text-sm font-medium">Tanggal Akhir</label>
+                            <label for="tanggal_end" class="block text-sm font-medium">Tanggal Akhir <span class="text-red-400">*</span></label>
                             <input id="tanggal_end" name="tanggal_end" type="date" class="w-full p-1 border rounded-md">
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                     <div class="flex space-x-4 mb-2">
                         <!-- Kluster Dropdown -->
                         <div class="w-full">
-                            <label for="cluster" class="block text-sm font-medium">Kluster</label>
+                            <label for="cluster" class="block text-sm font-medium">Kluster <span class="text-red-400">*</span></label>
                             <select id="cluster" name="kluster" class="w-full p-1 border rounded-md" required disabled>
                                 <option value="" disabled selected>Pilih Kluster</option>
                                 <option value="Sumbing">Sumbing</option>
@@ -69,7 +69,7 @@
 
                         <!-- Gedung Dropdown -->
                         <div class="w-full">
-                            <label for="gedung" class="block text-sm font-medium">Gedung</label>
+                            <label for="gedung" class="block text-sm font-medium">Gedung <span class="text-red-400">*</span></label>
                             <select id="gedung" name="gedung" class="w-full p-1 border rounded-md mb-2" required disabled>
                                 <option value="" disabled selected>Pilih Gedung</option>
                             </select>
@@ -77,7 +77,7 @@
 
                         <!-- Room Dropdown -->
                         <div class="w-full">
-                            <label for="room" class="block text-sm font-medium">Ruang</label>
+                            <label for="room" class="block text-sm font-medium">Ruang <span class="text-red-400">*</span></label>
                             <select id="room" name="id_ruang" class="w-full p-1 border rounded-md mb-2" required disabled>
                                 <option value="" disabled selected>Pilih Ruang</option>
                             </select>
