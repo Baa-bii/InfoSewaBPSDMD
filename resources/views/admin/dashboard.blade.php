@@ -266,29 +266,31 @@
         });
     
         // Initialize the calendar
-    document.addEventListener('DOMContentLoaded', () => {
-        const currentDate = new Date();
-        const currentYear = currentDate.getFullYear();
-        const currentMonth = currentDate.getMonth();
+        document.addEventListener('DOMContentLoaded', () => {
+        let currentDate = new Date();
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth();
         
         // Initial load
         fetchBookingDates(currentYear, currentMonth);
 
         // Set up navigation buttons
         document.getElementById('prevMonth').addEventListener('click', () => {
-            currentMonth--;
-            if (currentMonth < 0) {
+            if (currentMonth === 0) {
                 currentMonth = 11;
                 currentYear--;
+            } else {
+                currentMonth--;
             }
             fetchBookingDates(currentYear, currentMonth);
         });
 
         document.getElementById('nextMonth').addEventListener('click', () => {
-            currentMonth++;
-            if (currentMonth > 11) {
+            if (currentMonth === 11) {
                 currentMonth = 0;
                 currentYear++;
+            } else {
+                currentMonth++;
             }
             fetchBookingDates(currentYear, currentMonth);
         });

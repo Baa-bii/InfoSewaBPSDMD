@@ -43,12 +43,36 @@
                     { data: 'nama_ruang', name: 'nama_ruang' },
                     { data: 'kluster', name: 'kluster' },
                     { data: 'gedung', name: 'gedung' },
-                    { data: 'tanggal_start', name: 'tanggal_start' },
-                    { data: 'tanggal_end', name: 'tanggal_end' },
+                    { 
+                        data: 'tanggal_start', 
+                        name: 'tanggal_start',
+                        render: function (data) {
+                            return formatTanggal(data);
+                        }
+                    },
+                    { 
+                        data: 'tanggal_end', 
+                        name: 'tanggal_end',
+                        render: function (data) {
+                            return formatTanggal(data);
+                        }
+                    },
                     { data: 'status', name: 'status' },
                 ]
             });
         });
+
+        // Fungsi untuk mengubah format tanggal menjadi dd-mm-yyyy
+        function formatTanggal(dateString) {
+            if (!dateString) return '';
+            
+            let date = new Date(dateString);
+            let day = String(date.getDate()).padStart(2, '0');
+            let month = String(date.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+            let year = date.getFullYear();
+
+            return `${day}-${month}-${year}`;
+        }
     </script>
 </body>
 </html>
