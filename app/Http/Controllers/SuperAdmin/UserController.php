@@ -39,7 +39,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $users = User::findOrFail($id);
-        return view('superAdmin.edit_user', compact('ruang'));
+        return view('superAdmin.edit_user', compact('users'));
     }
 
     public function update(Request $request, $id)

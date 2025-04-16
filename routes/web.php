@@ -43,7 +43,6 @@ Route::group(['middleware'=>'auth:sup-admin'], function(){
     Route::get('/sup-admin/booking/{id}/edit', [BookingController::class, 'edit'])->name('sup-admin.booking.edit');
     Route::put('/sup-admin/booking/{id}', [BookingController::class, 'update'])->name('sup-admin.booking.update');
     Route::delete('/sup-admin/booking/{id}', [BookingController::class, 'destroy'])->name('sup-admin.booking.destroy');
-    Route::get('/sup-admin/booking_riwayat', [SuperAdminController::class, 'booking_riwayat'])->name('sup-admin.booking-riwayat');
     Route::resource('/sup-admin/data-ruang', RuangController::class, [
         'names' => [
             'index' => 'sup-admin.ruang.index',

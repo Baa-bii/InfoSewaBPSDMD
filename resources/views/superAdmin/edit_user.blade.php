@@ -22,7 +22,7 @@
         
                 <!-- Nama User -->
                 <label for="name" class="block text-sm font-medium mb-2">Nama User</label>
-                <input id="name" name="name" type="text" class="w-full p-2 border rounded-md mb-4" value="{{ old('name', $user->) }}">
+                <input id="name" name="name" type="text" class="w-full p-2 border rounded-md mb-4" value="{{ old('name', $user->name) }}">
                 @error('name')
                     <div class="text-red-500 text-sm mb-2">{{ $message }}</div>
                 @enderror

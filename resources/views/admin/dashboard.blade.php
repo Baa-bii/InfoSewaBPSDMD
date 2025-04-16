@@ -14,7 +14,7 @@
     <x-header></x-header>
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
-        <h1 class="font-sans text-2xl font-semibold p-4 text-center">Dashboard</h1>
+        <h1 class="font-sans text-2xl font-semibold p-4">Dashboard</h1>
   
             <div class="pt-2 mt-8 w-full">
                 <div class="bg-white shadow-lg overflow-hidden">

@@ -23,7 +23,7 @@
         <div id="bookingModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
             <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full h-fit">
                 <h2 class="text-xl font-bold mb-4">Booking Ruang</h2>
-                <form action="{{ route('admin.booking.store') }}" method="POST">
+                <form id="bookingForm" action="{{ route('admin.booking.store') }}" method="POST">
                     @csrf
                     <!-- Nama Pemesan -->
                     <label for="nama_pemesan" class="block text-sm font-medium">Nama Pemesan</label>
@@ -103,6 +103,11 @@
                                 const startDate = new Date(startDateInput.value);
                                 const endDate = new Date(endDateInput.value);
 
+                                if (startDateInput.value) {
+                                    // Set min attribute for end date so it cannot be before start date
+                                    endDateInput.min = startDateInput.value;
+                                }
+
                                 if (startDateInput.value && endDateInput.value && startDate <= endDate) {
                                     clusterSelect.disabled = false;
                                 } else {
@@ -116,9 +121,14 @@
                                 }
                             }
 
+                            // Disable past dates
+                            const today = new Date().toISOString().split("T")[0];
+                            startDateInput.min = today;
+                            endDateInput.min = today;
+
                             // Add event listeners to date inputs
-                            startDateInput.addEventListener('change', checkDates);
-                            endDateInput.addEventListener('change', checkDates);
+                            startDateInput.addEventListener("change", checkDates);
+                            endDateInput.addEventListener("change", checkDates);
 
                             // Cluster change event
                             clusterSelect.addEventListener('change', function() {
@@ -335,21 +345,28 @@
         const openModalButton = document.getElementById('openModal');
         const closeModalButton = document.getElementById('closeModal');
         const modal = document.getElementById('bookingModal');
+        const form = document.getElementById('bookingForm'); // Replace with your form's actual ID
     
         // Open modal
         openModalButton.addEventListener('click', () => {
             modal.classList.remove('hidden');
         });
     
-        // Close modal
+        // Close modal and reset form
         closeModalButton.addEventListener('click', () => {
             modal.classList.add('hidden');
+            if (form) {
+                form.reset(); // Clears all form fields
+            }
         });
-    
+
         // Close modal when clicking outside the modal
         window.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.add('hidden');
+                if (form) {
+                    form.reset(); // Clears form when clicking outside modal
+                }
             }
         });
     </script>

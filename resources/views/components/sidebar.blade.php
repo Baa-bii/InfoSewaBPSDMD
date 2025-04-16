@@ -250,14 +250,6 @@
                                     Data Booking
                                 </a>
                             </li>
-                            <li class="{{ Route::is('sup-admin.booking-riwayat') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
-                                <a
-                                    href="{{ route('sup-admin.booking-riwayat') }}"
-                                    class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg"
-                                >
-                                    Riwayat Booking
-                                </a>
-                            </li>
                         </ul>
                     </li>
                     <!-- Data User -->

@@ -37,7 +37,7 @@
                     <td class="py-1 px-2 border-r border-gray-500">{{ $item->email }}</td>
                     <td class="py-1 px-2 border-r border-gray-500">{{ $item->role }}</td>
                     <td class="py-1 px-2 ">
-                        <a href="#">
+                        <a href="{{ route('sup-admin.user.edit', $item->id) }}">
                             <button class="bg-green-400 w-auto p-1 rounded text-white hover:bg-green-500 shadow-md">
                                 Edit
                             </button>
