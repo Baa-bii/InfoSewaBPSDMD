@@ -236,7 +236,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp150.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 16</p>
+                        @php
+                            $tersedia = $dataKamar['Sumbing']['I']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sumbing']['I']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -247,7 +255,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 3</p>
                         <p class="text-sm mx-2">Harga: Rp125.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 24</p>
+                        @php
+                            $tersedia = $dataKamar['Sumbing']['II']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sumbing']['II']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -258,7 +274,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 3</p>
                         <p class="text-sm mx-2">Harga: Rp125.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 32</p>
+                        @php
+                            $tersedia = $dataKamar['Sumbing']['III']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sumbing']['III']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -269,7 +293,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp150.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 24</p>
+                        @php
+                            $tersedia = $dataKamar['Sumbing']['IV']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sumbing']['IV']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -280,7 +312,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp200.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 22</p>
+                        @php
+                            $tersedia = $dataKamar['Muria']['I']['tersedia'] ?? 0;
+                            $total = $dataKamar['Muria']['I']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -291,7 +331,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp200.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 15</p>
+                        @php
+                            $tersedia = $dataKamar['Muria']['II']['tersedia'] ?? 0;
+                            $total = $dataKamar['Muria']['II']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -302,7 +350,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp150.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 48</p>
+                        @php
+                            $tersedia = $dataKamar['Sindoro']['I']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sindoro']['I']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -313,7 +369,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 4</p>
                         <p class="text-sm mx-2">Harga: Rp100.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 45</p>
+                        @php
+                            $tersedia = $dataKamar['Sindoro']['II']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sindoro']['II']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -324,7 +388,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp150.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 48</p>
+                        @php
+                            $tersedia = $dataKamar['Sindoro']['III']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sindoro']['III']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -335,7 +407,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp200.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 50</p>
+                        @php
+                            $tersedia = $dataKamar['Merapi']['I']['tersedia'] ?? 0;
+                            $total = $dataKamar['Merapi']['I']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>

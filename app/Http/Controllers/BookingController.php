@@ -37,20 +37,52 @@ class BookingController extends Controller
     public function index(Request $request)
     {
         $bookings = Booking::with('ruang')->get();
-        $klusters = array_keys($this->gedungList); // Get klusters from the array keys
+        $klusters = array_keys($this->gedungList);
         $rooms = Ruang::all();
-        // Convert gedungList to a collection format that matches the view expectations
+        
         $gedungs = collect($this->gedungList)->map(function ($items, $kluster) {
             return (object)['gedung' => $kluster];
         });
-        
+
+        // Asumsi kolom jumlah kamar di ruang adalah 'kapasitas'
+        $jumlahTotalKamar = DB::table('ruang')
+            ->select('kluster', 'gedung', DB::raw('COUNT(*) as total_kamar'))
+            ->groupBy('kluster', 'gedung')
+            ->get();
+
+        $jumlahBooking = DB::table('jadwal_booking as jb')
+            ->join('ruang as r', 'jb.id_ruang', '=', 'r.id')
+            ->select('r.kluster', 'r.gedung', DB::raw('count(*) as kamar_terbooking'))
+            ->groupBy('r.kluster', 'r.gedung')
+            ->get();
+
+        $dataKamar = [];
+        foreach ($jumlahTotalKamar as $item) {
+            $kluster = $item->kluster;
+            $gedung = $item->gedung;
+            $total = $item->total_kamar;
+
+            $booking = $jumlahBooking->first(function($b) use ($kluster, $gedung) {
+                return $b->kluster === $kluster && $b->gedung === $gedung;
+            });
+
+            $terbooking = $booking ? $booking->kamar_terbooking : 0;
+            $tersedia = $total - $terbooking;
+
+            $dataKamar[$kluster][$gedung] = [
+                'tersedia' => $tersedia,
+                'total' => $total,
+            ];
+        }
+
         if(Auth::guard('sup-admin')->check()) {
-            return view('superAdmin.booking.booking_ruang', compact('bookings', 'klusters','gedungs', 'rooms'));
+            return view('superAdmin.booking.booking_ruang', compact('bookings', 'klusters','gedungs', 'rooms','dataKamar'));
         }
         elseif(Auth::guard('admin')->check()) {
-            return view('admin.booking.booking_ruang', compact('bookings', 'klusters', 'gedungs', 'rooms'));
+            return view('admin.booking.booking_ruang', compact('bookings', 'klusters', 'gedungs', 'rooms','dataKamar'));
         }
     }
+
     public function create()
     {
         $klusters = Ruang::select('kluster')->distinct()->get();
