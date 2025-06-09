@@ -20,8 +20,8 @@
         </div>
 
         <!-- Modal -->
-        <div id="bookingModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full h-fit">
+        <div id="bookingModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full h-fit transform transition-transform duration-300 ease-in-out scale-95">
                 <h2 class="text-xl font-bold mb-4">Booking Ruang</h2>
                 <form id="bookingForm" action="{{ route('sup-admin.booking.store') }}" method="POST">
                     @csrf
@@ -62,7 +62,6 @@
                                 <option value="Sumbing">Sumbing</option>
                                 <option value="Muria">Muria</option>
                                 <option value="Sindoro">Sindoro</option>
-                                <option value="Merbabu">Merbabu</option>
                                 <option value="Merapi">Merapi</option>
                             </select>
                         </div>
@@ -210,7 +209,7 @@
 
                     </script>
                     @if ($errors->any())
-                    <div class="alert alert-danger text-red-400">
+                    <div id="error-container" class="alert alert-danger text-red-400">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -225,6 +224,21 @@
                         <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Simpan</button>
                     </div>
                 </form>                
+            </div>
+        </div>
+
+        <div id="successModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
+            <div class="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full mx-4 text-center transform transition-all duration-300 ease-in-out scale-95">
+                <div class="mb-4">
+                    <div id="success-icon-container" class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {{-- Added class="checkmark__path" to the path --}}
+                            <path class="checkmark__path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Booking Berhasil!</h3>
+                    <p class="text-gray-600">Booking ruang Anda telah berhasil disimpan.</p>
+                </div>
             </div>
         </div>
         
@@ -426,30 +440,79 @@
         // Get elements
         const openModalButton = document.getElementById('openModal');
         const closeModalButton = document.getElementById('closeModal');
+        const successModal = document.getElementById('successModal');
+        const successIconContainer = document.getElementById('success-icon-container');
         const modal = document.getElementById('bookingModal');
-        const form = document.getElementById('bookingForm'); // Replace with your form's actual ID
-    
-        // Open modal
-        openModalButton.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-    
-        // Close modal and reset form
-        closeModalButton.addEventListener('click', () => {
-            modal.classList.add('hidden');
+        const modalPanel = modal.querySelector('.transform');
+        const form = document.getElementById('bookingForm');
+
+        // --- Functions to manage the booking modal ---
+        const openBookingModal = () => {
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.remove();
+            }
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalPanel.classList.remove('scale-95');
+        };
+
+        const closeBookingModal = () => {
+            modal.classList.add('opacity-0');
+            modalPanel.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none');
+            }, 300);
+        };
+
+        const cancelAndCloseModal = () => {
             if (form) {
-                form.reset(); // Clears all form fields
+                form.reset();
+            }
+            closeBookingModal();
+        };
+
+        // --- Event Listeners ---
+        openModalButton.addEventListener('click', openBookingModal);
+        closeModalButton.addEventListener('click', cancelAndCloseModal);
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeBookingModal();
             }
         });
 
-        // Close modal when clicking outside the modal
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-                if (form) {
-                    form.reset(); // Clears form when clicking outside modal
-                }
-            }
+        // --- Updated Form Submission Handler ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            closeBookingModal();
+
+            // Show success modal after booking modal starts closing
+            setTimeout(() => {
+                const modalContent = successModal.querySelector('.transform');
+                
+                // 1. Make the modal visible (fade in)
+                successModal.classList.remove('opacity-0', 'pointer-events-none');
+                
+                // 2. Animate the panel (scale up)
+                modalContent.classList.remove('scale-95');
+
+                // 3. Trigger the SVG drawing animation
+                successIconContainer.classList.add('animate-draw');
+                
+                // Hide success modal after a delay
+                setTimeout(() => {
+                    // Animate out
+                    successModal.classList.add('opacity-0');
+                    modalContent.classList.add('scale-95');
+                    
+                    // Wait for animation to finish before submitting the form
+                    setTimeout(() => {
+                        successModal.classList.add('pointer-events-none');
+                        // Remove animation class for next time
+                        successIconContainer.classList.remove('animate-draw'); 
+                        form.submit();
+                    }, 300); // Duration of the fade/scale out animation
+                }, 1500); // How long the success modal stays visible
+            }, 400);
         });
     </script>
     

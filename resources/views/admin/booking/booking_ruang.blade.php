@@ -20,35 +20,35 @@
         </div>
 
         <!-- Modal -->
-        <div id="bookingModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full h-fit">
+        <div id="bookingModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full h-fit transform transition-transform duration-300 ease-in-out scale-95">
                 <h2 class="text-xl font-bold mb-4">Booking Ruang</h2>
                 <form id="bookingForm" action="{{ route('admin.booking.store') }}" method="POST">
                     @csrf
                     <!-- Nama Pemesan -->
-                    <label for="nama_pemesan" class="block text-sm font-medium">Nama Pemesan</label>
+                    <label for="nama_pemesan" class="block text-sm font-medium">Nama Pemesan <span class="text-red-400">*</span></label>
                     <input id="nama_pemesan" name="nama_pemesan" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- No KTP -->
-                    <label for="no_ktp" class="block text-sm font-medium">No KTP</label>
+                    <label for="no_ktp" class="block text-sm font-medium">No KTP <span class="text-red-400">*</span></label>
                     <input id="no_ktp" name="no_ktp" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- No Hp -->
-                    <label for="no_hp" class="block text-sm font-medium">No HP</label>
+                    <label for="no_hp" class="block text-sm font-medium">No HP <span class="text-red-400">*</span></label>
                     <input id="no_hp" name="no_hp" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- Keperluan -->
-                    <label for="keperluan" class="block text-sm font-medium">Keperluan</label>
+                    <label for="keperluan" class="block text-sm font-medium">Keperluan <span class="text-red-400">*</span></label>
                     <input id="keperluan" name="keperluan" type="text" class="w-full p-1 border rounded-md mb-2" required>
 
                     <!-- Tanggal Mulai dan Tanggal Akhir -->
                     <div class="flex space-x-4 mb-2">
                         <div class="w-full">
-                            <label for="tanggal_start" class="block text-sm font-medium">Tanggal Mulai</label>
+                            <label for="tanggal_start" class="block text-sm font-medium">Tanggal Mulai <span class="text-red-400">*</span></label>
                             <input id="tanggal_start" name="tanggal_start" type="date" class="w-full p-1 border rounded-md">
                         </div>
                         <div class="w-full">
-                            <label for="tanggal_end" class="block text-sm font-medium">Tanggal Akhir</label>
+                            <label for="tanggal_end" class="block text-sm font-medium">Tanggal Akhir <span class="text-red-400">*</span></label>
                             <input id="tanggal_end" name="tanggal_end" type="date" class="w-full p-1 border rounded-md">
                         </div>
                     </div>
@@ -56,20 +56,19 @@
                     <div class="flex space-x-4 mb-2">
                         <!-- Kluster Dropdown -->
                         <div class="w-full">
-                            <label for="cluster" class="block text-sm font-medium">Kluster</label>
+                            <label for="cluster" class="block text-sm font-medium">Kluster <span class="text-red-400">*</span></label>
                             <select id="cluster" name="kluster" class="w-full p-1 border rounded-md" required disabled>
                                 <option value="" disabled selected>Pilih Kluster</option>
                                 <option value="Sumbing">Sumbing</option>
                                 <option value="Muria">Muria</option>
                                 <option value="Sindoro">Sindoro</option>
-                                <option value="Merbabu">Merbabu</option>
                                 <option value="Merapi">Merapi</option>
                             </select>
                         </div>
 
                         <!-- Gedung Dropdown -->
                         <div class="w-full">
-                            <label for="gedung" class="block text-sm font-medium">Gedung</label>
+                            <label for="gedung" class="block text-sm font-medium">Gedung <span class="text-red-400">*</span></label>
                             <select id="gedung" name="gedung" class="w-full p-1 border rounded-md mb-2" required disabled>
                                 <option value="" disabled selected>Pilih Gedung</option>
                             </select>
@@ -77,7 +76,7 @@
 
                         <!-- Room Dropdown -->
                         <div class="w-full">
-                            <label for="room" class="block text-sm font-medium">Ruang</label>
+                            <label for="room" class="block text-sm font-medium">Ruang <span class="text-red-400">*</span></label>
                             <select id="room" name="id_ruang" class="w-full p-1 border rounded-md mb-2" required disabled>
                                 <option value="" disabled selected>Pilih Ruang</option>
                             </select>
@@ -135,6 +134,7 @@
                                 const selectedCluster = this.value;
                                 
                                 // Reset and enable gedung dropdown
+                                gedungSelect.innerHTML = '';
                                 gedungSelect.innerHTML = '<option value="" disabled selected>Pilih Gedung</option>';
                                 gedungSelect.disabled = false;
 
@@ -146,6 +146,7 @@
                                 fetch(`/api/get-gedung?kluster=${selectedCluster}`)
                                     .then(response => response.json())
                                     .then(data => {
+                                        console.log('Data dari API:', data);
                                         data.forEach(gedung => {
                                             const option = document.createElement('option');
                                             option.value = gedung;
@@ -208,7 +209,7 @@
 
                     </script>
                     @if ($errors->any())
-                    <div class="alert alert-danger text-red-400">
+                    <div id="error-container" class="alert alert-danger text-red-400">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -225,6 +226,21 @@
                 </form>                
             </div>
         </div>
+
+        <div id="successModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
+            <div class="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full mx-4 text-center transform transition-all duration-300 ease-in-out scale-95">
+                <div class="mb-4">
+                    <div id="success-icon-container" class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {{-- Added class="checkmark__path" to the path --}}
+                            <path class="checkmark__path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Booking Berhasil!</h3>
+                    <p class="text-gray-600">Booking ruang Anda telah berhasil disimpan.</p>
+                </div>
+            </div>
+        </div>
         
         <div class=" grid grid-cols-5 grid-flow-row gap-4">
             <div class="bg-gray-900 w-fit h-auto shadow-lg p-2 rounded-md flex flex-row">
@@ -234,7 +250,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp150.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 16</p>
+                        @php
+                            $tersedia = $dataKamar['Sumbing']['I']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sumbing']['I']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -245,7 +269,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 3</p>
                         <p class="text-sm mx-2">Harga: Rp125.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 24</p>
+                        @php
+                            $tersedia = $dataKamar['Sumbing']['II']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sumbing']['II']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -256,7 +288,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 3</p>
                         <p class="text-sm mx-2">Harga: Rp125.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 32</p>
+                        @php
+                            $tersedia = $dataKamar['Sumbing']['III']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sumbing']['III']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -267,7 +307,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp150.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 24</p>
+                        @php
+                            $tersedia = $dataKamar['Sumbing']['IV']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sumbing']['IV']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -278,7 +326,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp200.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 22</p>
+                        @php
+                            $tersedia = $dataKamar['Muria']['I']['tersedia'] ?? 0;
+                            $total = $dataKamar['Muria']['I']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -289,7 +345,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp200.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 15</p>
+                        @php
+                            $tersedia = $dataKamar['Muria']['II']['tersedia'] ?? 0;
+                            $total = $dataKamar['Muria']['II']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -300,7 +364,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp150.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 48</p>
+                        @php
+                            $tersedia = $dataKamar['Sindoro']['I']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sindoro']['I']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -311,7 +383,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 4</p>
                         <p class="text-sm mx-2">Harga: Rp100.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 45</p>
+                        @php
+                            $tersedia = $dataKamar['Sindoro']['II']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sindoro']['II']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -322,7 +402,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp150.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 48</p>
+                        @php
+                            $tersedia = $dataKamar['Sindoro']['III']['tersedia'] ?? 0;
+                            $total = $dataKamar['Sindoro']['III']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -333,7 +421,15 @@
                     <div class="text-white">
                         <p class="text-sm mx-2">Kapasitas: 2</p>
                         <p class="text-sm mx-2">Harga: Rp200.000</p>
-                        <p class="text-sm mx-2">Jumlah kamar: 50</p>
+                        @php
+                            $tersedia = $dataKamar['Merapi']['I']['tersedia'] ?? 0;
+                            $total = $dataKamar['Merapi']['I']['total'] ?? 0;
+                            $warna = $tersedia == 0 ? 'text-red-500' : 'text-green-500 font-bold';
+                        @endphp
+
+                        <p class="text-sm mx-2">
+                            Jumlah kamar: <span class="{{ $warna }}">{{ $tersedia }}</span> / <span class="text-white">{{ $total }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -344,30 +440,79 @@
         // Get elements
         const openModalButton = document.getElementById('openModal');
         const closeModalButton = document.getElementById('closeModal');
+        const successModal = document.getElementById('successModal');
+        const successIconContainer = document.getElementById('success-icon-container');
         const modal = document.getElementById('bookingModal');
-        const form = document.getElementById('bookingForm'); // Replace with your form's actual ID
-    
-        // Open modal
-        openModalButton.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-    
-        // Close modal and reset form
-        closeModalButton.addEventListener('click', () => {
-            modal.classList.add('hidden');
+        const modalPanel = modal.querySelector('.transform');
+        const form = document.getElementById('bookingForm');
+
+        // --- Functions to manage the booking modal ---
+        const openBookingModal = () => {
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.remove();
+            }
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalPanel.classList.remove('scale-95');
+        };
+
+        const closeBookingModal = () => {
+            modal.classList.add('opacity-0');
+            modalPanel.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('pointer-events-none');
+            }, 300);
+        };
+
+        const cancelAndCloseModal = () => {
             if (form) {
-                form.reset(); // Clears all form fields
+                form.reset();
+            }
+            closeBookingModal();
+        };
+
+        // --- Event Listeners ---
+        openModalButton.addEventListener('click', openBookingModal);
+        closeModalButton.addEventListener('click', cancelAndCloseModal);
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeBookingModal();
             }
         });
 
-        // Close modal when clicking outside the modal
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-                if (form) {
-                    form.reset(); // Clears form when clicking outside modal
-                }
-            }
+        // --- Updated Form Submission Handler ---
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            closeBookingModal();
+
+            // Show success modal after booking modal starts closing
+            setTimeout(() => {
+                const modalContent = successModal.querySelector('.transform');
+                
+                // 1. Make the modal visible (fade in)
+                successModal.classList.remove('opacity-0', 'pointer-events-none');
+                
+                // 2. Animate the panel (scale up)
+                modalContent.classList.remove('scale-95');
+
+                // 3. Trigger the SVG drawing animation
+                successIconContainer.classList.add('animate-draw');
+                
+                // Hide success modal after a delay
+                setTimeout(() => {
+                    // Animate out
+                    successModal.classList.add('opacity-0');
+                    modalContent.classList.add('scale-95');
+                    
+                    // Wait for animation to finish before submitting the form
+                    setTimeout(() => {
+                        successModal.classList.add('pointer-events-none');
+                        // Remove animation class for next time
+                        successIconContainer.classList.remove('animate-draw'); 
+                        form.submit();
+                    }, 300); // Duration of the fade/scale out animation
+                }, 1500); // How long the success modal stays visible
+            }, 400);
         });
     </script>
     

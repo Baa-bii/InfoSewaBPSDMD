@@ -3,12 +3,12 @@
 
         <!-- Sidebar -->
         <aside
-                class="fixed top-0 left-0 z-40 w-56 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+                class="fixed top-0 left-0 z-40 w-48 h-screen pt-12 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
                 aria-label="Sidenav"
                 id="drawer-navigation"
             >
                 <div class="overflow-y-auto px-3 h-full">
-                    <ul class="space-y-2">
+                    <ul class="space-y-1">
                     @if($user ->role=== 'admin')
                         <!-- Dashboard -->
                         <li class="{{ Route::is('admin.dashboard.index') ? 'bg-gray-900' : '' }} hover:bg-gray-900 rounded-lg">
@@ -232,7 +232,7 @@
                         </button>
                         <ul
                             id="dropdown-booking"
-                            class="hidden mt-2 space-y-2 bg-gray-800 rounded-lg"
+                            class="hidden mt-2 space-y-1 bg-gray-800 rounded-lg"
                         >
                             <li class="{{ Route::is('sup-admin.booking-ruang') ? 'bg-gray-700' : '' }} hover:bg-gray-700 rounded-b-lg">
                                 <a

@@ -15,7 +15,67 @@
     <x-sidebar></x-sidebar>
     <main class="p-16 md:ml-64 h-auto pt-20 flex-grow">
         <h1 class="font-sans text-2xl font-semibold p-4">Dashboard</h1>
-  
+            <div class="relative w-full mt-6 rounded-xl overflow-hidden" id="carousel">
+            <div class="carousel-inner relative w-full h-96">
+                <div class="carousel-item absolute inset-0 opacity-100 transition-opacity duration-1000">
+                    <img src="/assets/bg.jpg" class="w-full h-full object-fit" alt="Slide 1">
+                </div>
+                <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-1000">
+                    <img src="/assets/sumbing3.jpg" class="w-full h-full object-fit" alt="Slide 2">
+                </div>
+                <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-1000">
+                    <img src="/assets/sumbing4.jpg" class="w-full h-full object-fit" alt="Slide 3">
+                </div>
+            </div>
+
+            <!-- Navigasi manual -->
+            <button id="prevSlide" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-30 text-white p-2">
+                &#10094;
+            </button>
+            <button id="nextSlide" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-30 text-white p-2">
+                &#10095;
+            </button>
+        </div>
+        <script>//script carousel
+            const items = document.querySelectorAll('#carousel .carousel-item');
+            const total = items.length;
+            let index = 0;
+            let interval = setInterval(showNextSlide, 5000); // otomatis setiap 5 detik
+
+            function showSlide(idx) {
+                items.forEach((item, i) => {
+                    item.style.opacity = (i === idx) ? '1' : '0';
+                });
+            }
+
+            function showNextSlide() {
+                index = (index + 1) % total;
+                showSlide(index);
+            }
+
+            function showPrevSlide() {
+                index = (index - 1 + total) % total;
+                showSlide(index);
+            }
+
+            document.getElementById('nextSlide').addEventListener('click', () => {
+                showNextSlide();
+                resetInterval();
+            });
+
+            document.getElementById('prevSlide').addEventListener('click', () => {
+                showPrevSlide();
+                resetInterval();
+            });
+
+            function resetInterval() {
+                clearInterval(interval);
+                interval = setInterval(showNextSlide, 5000);
+            }
+
+            // Inisialisasi
+            showSlide(index);
+        </script>
             <div class="pt-2 mt-8 w-full">
                 <div class="bg-white shadow-lg overflow-hidden">
                     <div class="flex items-center justify-between px-4 py-3 bg-gray-700 rounded-t-lg">
