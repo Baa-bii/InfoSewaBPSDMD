@@ -120,32 +120,33 @@ class BookingController extends Controller
             $tanggal_end = $request->input('tanggal_end');
 
             if (!$kluster || !$gedung || !$tanggal_start || !$tanggal_end) {
-                return response()->json(['error' => 'Kluster, Gedung, Tanggal Start, atau Tanggal End tidak boleh kosong'], 400);
+                return response()->json(['error' => 'Parameter tidak lengkap'], 400);
             }
 
-            // Query Ruang yang tidak ada dalam Booking
-            $rooms = DB::table('ruang')
-                ->select('ruang.id', 'ruang.nama_ruang')
-                ->whereNotExists(function ($query) use ($tanggal_start, $tanggal_end) {
-                    $query->from('jadwal_booking')
-                        ->whereColumn('jadwal_booking.id_ruang', 'ruang.id')
-                        ->where(function ($q) use ($tanggal_start, $tanggal_end) {
-                            $q->whereBetween('jadwal_booking.tanggal_start', [$tanggal_start, $tanggal_end])
-                                ->orWhereBetween('jadwal_booking.tanggal_end', [$tanggal_start, $tanggal_end])
-                                ->orWhere(function ($inner) use ($tanggal_start, $tanggal_end) {
-                                    $inner->where('jadwal_booking.tanggal_start', '<=', $tanggal_start)
-                                        ->where('jadwal_booking.tanggal_end', '>=', $tanggal_end);
-                                });
+            // Dapatkan ID Ruang yang sudah di-booking pada rentang tanggal yang dipilih
+            $bookedRoomIds = Booking::where(function ($query) use ($tanggal_start, $tanggal_end) {
+                    $query->whereBetween('tanggal_start', [$tanggal_start, $tanggal_end])
+                        ->orWhereBetween('tanggal_end', [$tanggal_start, $tanggal_end])
+                        ->orWhere(function ($inner) use ($tanggal_start, $tanggal_end) {
+                            $inner->where('tanggal_start', '<=', $tanggal_start)
+                                    ->where('tanggal_end', '>=', $tanggal_end);
                         });
                 })
-                ->where('ruang.kluster', $kluster)
-                ->where('ruang.gedung', $gedung)
+                ->pluck('id_ruang');
+
+            // Cari semua ruang yang cocok dengan kluster dan gedung, 
+            // KECUALI yang ID-nya sudah di-booking
+            $availableRooms = Ruang::where('kluster', $kluster)
+                ->where('gedung', $gedung)
+                ->whereNotIn('id', $bookedRoomIds)
+                ->select('id', 'nama_ruang')
                 ->get();
-    
-            return response()->json($rooms);
+
+            return response()->json($availableRooms);
+
         } catch (\Exception $e) {
-            Log::error('Error in getAvailableRooms:', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return response()->json(['error' => 'Terjadi kesalahan server. Cek log untuk detail.'], 500);
+            Log::error('Error in getAvailableRooms:', ['message' => $e->getMessage()]);
+            return response()->json(['error' => 'Terjadi kesalahan server.'], 500);
         }
     }
 
@@ -164,7 +165,7 @@ class BookingController extends Controller
             'keperluan' => 'required|string|max:255',
             'id_ruang' => 'required|exists:ruang,id',
             'tanggal_start' => 'required|date|after_or_equal:today',
-            'tanggal_end' => 'required|date|after:tanggal_start',
+            'tanggal_end' => 'required|date|after_or_equal:tanggal_start',
         ]);
 
         // Validasi waktu tidak tumpang tindih
