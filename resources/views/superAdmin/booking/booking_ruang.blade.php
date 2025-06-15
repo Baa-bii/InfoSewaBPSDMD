@@ -482,36 +482,55 @@
 
         // --- Updated Form Submission Handler ---
         form.addEventListener('submit', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Mencegah pengiriman form standar
+            
             closeBookingModal();
 
-            // Show success modal after booking modal starts closing
             setTimeout(() => {
                 const modalContent = successModal.querySelector('.transform');
-                
-                // 1. Make the modal visible (fade in)
                 successModal.classList.remove('opacity-0', 'pointer-events-none');
-                
-                // 2. Animate the panel (scale up)
                 modalContent.classList.remove('scale-95');
-
-                // 3. Trigger the SVG drawing animation
                 successIconContainer.classList.add('animate-draw');
-                
-                // Hide success modal after a delay
-                setTimeout(() => {
-                    // Animate out
+
+                const formData = new FormData(form);
+                const action = form.getAttribute('action');
+                const method = form.getAttribute('method');
+
+                fetch(action, {
+                    method: method,
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                    }
+                })
+                .then(response => {
+                    // Cukup periksa apakah respons-nya OK (status HTTP 200-299).
+                    // Ini menandakan form berhasil disubmit (termasuk redirect).
+                    if (response.ok) {
+                        // Jika sukses, tunggu 1.5 detik agar animasi terlihat, lalu reload halaman.
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        // Jika ada error dari server (spt. 500), lemparkan untuk ditangkap .catch()
+                        throw new Error(`Server merespons dengan status: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saat submit:', error);
+                    
+                    // Sembunyikan modal sukses jika terjadi error
+                    const modalContent = successModal.querySelector('.transform');
                     successModal.classList.add('opacity-0');
                     modalContent.classList.add('scale-95');
-                    
-                    // Wait for animation to finish before submitting the form
-                    setTimeout(() => {
+                     setTimeout(() => {
                         successModal.classList.add('pointer-events-none');
-                        // Remove animation class for next time
-                        successIconContainer.classList.remove('animate-draw'); 
-                        form.submit();
-                    }, 300); // Duration of the fade/scale out animation
-                }, 1500); // How long the success modal stays visible
+                        successIconContainer.classList.remove('animate-draw');
+                    }, 300);
+
+                    // Beri tahu user ada kesalahan
+                    alert('Booking gagal. Terjadi kesalahan saat mengirim data.');
+                });
             }, 400);
         });
     </script>
