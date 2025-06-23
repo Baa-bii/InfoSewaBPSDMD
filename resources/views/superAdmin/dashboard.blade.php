@@ -18,13 +18,10 @@
         <div class="relative w-full mt-6 rounded-xl overflow-hidden" id="carousel">
             <div class="carousel-inner relative w-full h-96">
                 <div class="carousel-item absolute inset-0 opacity-100 transition-opacity duration-1000">
-                    <img src="/assets/bg.jpg" class="w-full h-full object-fit" alt="Slide 1">
+                    <img src="/assets/bpsdmd2.jpg" class="w-full h-full object-cover" alt="Slide 1">
                 </div>
                 <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-1000">
-                    <img src="/assets/sumbing3.jpg" class="w-full h-full object-fit" alt="Slide 2">
-                </div>
-                <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-1000">
-                    <img src="/assets/sumbing4.jpg" class="w-full h-full object-fit" alt="Slide 3">
+                    <img src="/assets/bpsdmd.jpg" class="w-full h-full object-cover" alt="Slide 2">
                 </div>
             </div>
 
@@ -114,17 +111,17 @@
                                 <table class="w-full min-w-max table-auto bg-white border rounded-lg shadow-md">
                                     <thead>
                                         <tr class="border border-gray-300 bg-gray-500">
-                                            <th class="p-2 text-left text-white border-r border-white">Ruang</th>
                                             <th class="p-2 text-left text-white border-r border-white">Kluster</th>
-                                            <th class="p-2 text-left text-white">Gedung</th>
+                                            <th class="p-2 text-left text-white border-r border-white">Gedung</th>
+                                            <th class="p-2 text-left text-white">No Kamar</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-300">
                                         @forelse ($bookings as $item)
                                         <tr>
-                                            <td class="py-1 px-2 border-r border-gray-300">{{ $item->nama_ruang }}</td>
                                             <td class="py-1 px-2 border-r border-gray-300">{{ $item->kluster }}</td>
-                                            <td class="py-1 px-2 ">{{ $item->kluster }} {{ $item->gedung }}</td>
+                                            <td class="py-1 px-2 border-r border-gray-300">{{ $item->kluster }} {{ $item->gedung }}</td>
+                                            <td class="py-1 px-2 ">{{ $item->nama_ruang }}</td>
                                         </tr>
                                         @empty
                                         <tr>
@@ -216,9 +213,9 @@
                     bookings.forEach(booking => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td class="py-1 px-2 border-r border-gray-300">${booking.nama_ruang || '-'}</td>
                             <td class="py-1 px-2 border-r border-gray-300">${booking.kluster || '-'}</td>
-                            <td class="py-1 px-2">${booking.gedung || '-'}</td>
+                            <td class="py-1 px-2 border-r border-gray-300">${booking.gedung || '-'}</td>
+                            <td class="py-1 px-2">${booking.nama_ruang || '-'}</td>
                         `;
                         tbody.appendChild(tr);
                     });

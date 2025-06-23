@@ -48,9 +48,9 @@
                 <table class="w-full min-w-max table-auto bg-white border rounded-lg shadow-md">
                     <thead class="bg-gray-700 text-white">
                         <tr class="border border-gray-300">
-                            <th class="p-2 text-left border-r border-white">Nama Ruang</th>
-                            <th class="p-2 text-left border-r border-white">Gedung</th>
                             <th class="p-2 text-left border-r border-white">Kluster</th>
+                            <th class="p-2 text-left border-r border-white">Gedung</th>
+                            <th class="p-2 text-left border-r border-white">No Kamar</th>
                             <th class="p-2 text-left border-r border-white">Kapasitas</th>
                             <th class="p-2 text-left border-r border-white">Harga</th>
                             <th class="p-2 text-left">Aksi</th>
@@ -59,11 +59,11 @@
                     <tbody class="divide-y divide-gray-300">
                         @foreach ($ruang as $item)
                         <tr>
-                            <td class="py-1 px-2 border-r border-gray-500">{{ $item->nama_ruang }}</td>
-                            <td class="py-1 px-2 border-r border-gray-500">{{ $item->gedung }}</td>
                             <td class="py-1 px-2 border-r border-gray-500">{{ $item->kluster }}</td>
+                            <td class="py-1 px-2 border-r border-gray-500">{{ $item->gedung }}</td>
+                            <td class="py-1 px-2 border-r border-gray-500">{{ $item->nama_ruang }}</td>
                             <td class="py-1 px-2 border-r border-gray-500">{{ $item->kapasitas }}</td>
-                            <td class="py-1 px-2 border-r border-gray-500">{{ $item->harga }}</td>
+                            <td class="py-1 px-2 border-r border-gray-500">Rp{{ number_format($item->harga, 0, ',', '.') }},00</td>
                             <td class="py-1 px-2">
                                 <a href="{{ route('sup-admin.ruang.edit', $item->id) }}">
                                     <button class="bg-green-400 w-auto p-1 rounded text-white hover:bg-green-500 shadow-md">

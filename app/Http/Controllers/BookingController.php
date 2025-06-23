@@ -46,15 +46,17 @@ class BookingController extends Controller
 
         // Asumsi kolom jumlah kamar di ruang adalah 'kapasitas'
         $jumlahTotalKamar = DB::table('ruang')
-            ->select('kluster', 'gedung', DB::raw('COUNT(*) as total_kamar'))
-            ->groupBy('kluster', 'gedung')
-            ->get();
+        ->select('kluster', 'gedung', DB::raw('COUNT(*) as total_kamar'))
+        ->where('booking_status', 0) // only count rooms marked as active
+        ->groupBy('kluster', 'gedung')
+        ->get();
 
         $jumlahBooking = DB::table('jadwal_booking as jb')
-            ->join('ruang as r', 'jb.id_ruang', '=', 'r.id')
-            ->select('r.kluster', 'r.gedung', DB::raw('count(*) as kamar_terbooking'))
-            ->groupBy('r.kluster', 'r.gedung')
-            ->get();
+        ->join('ruang as r', 'jb.id_ruang', '=', 'r.id')
+        ->select('r.kluster', 'r.gedung', DB::raw('count(*) as kamar_terbooking'))
+        ->where('r.booking_status', 1) // only include bookings from active rooms
+        ->groupBy('r.kluster', 'r.gedung')
+        ->get();
 
         $dataKamar = [];
         foreach ($jumlahTotalKamar as $item) {
@@ -211,7 +213,16 @@ class BookingController extends Controller
         $booking->status = $booking->status === 'belum' ? 'sudah' : 'belum';
         $booking->save();
 
-        return response()->json(['success' => true, 'status' => $booking->status]);
+        // Get related ruang using id_ruang from jadwal_booking
+        $ruang = Ruang::findOrFail($booking->id_ruang);
+        $ruang->booking_status = !$ruang->booking_status;
+        $ruang->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $booking->status,
+            'ruang_status' => $ruang->booking_status
+        ]);
     }
 
     public function edit($id)

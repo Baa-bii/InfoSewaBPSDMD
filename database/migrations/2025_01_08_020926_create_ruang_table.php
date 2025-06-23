@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('kluster');
             $table->string('gedung')->nullable();
             $table->integer('harga');
+            $table->boolean('booking_status')->default(false);
+            $table->boolean('validate_status')->default(false);
             $table->integer('kapasitas');
             $table->timestamps();
         });
